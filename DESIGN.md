@@ -11,32 +11,33 @@ This document outlines the visual language and interaction design of the project
 
 To guarantee automatic M3E compliance, we use a strict semantic token mapping in our `src/design/tailwind.css`. 
 
-**Strict Rule:** Arbitrary hex colors (e.g., `bg-[#ff0000]`) and direct/generic Tailwind color classes (e.g., `bg-blue-500`, `text-red-600`) are **strictly forbidden** in the UI. You must *only* use functional Material semantic classes (e.g., `bg-primary`, `text-error`, `bg-surface-variant`).
+**Strict Rule:** Arbitrary hex colors (e.g., `bg-[#ff0000]`) and direct/generic Tailwind color classes (e.g., `bg-blue-500`, `text-red-600`) are **strictly forbidden** in the UI. You must *only* use functional Material semantic classes (e.g., `bg-primary` and `text-error`).
 
 ### Tonal Palette Roles (from `tailwind.css`)
 To maintain consistency, colors must be used strictly for their designated semantic roles:
 
 *   **Primary (`primary`, `on-primary`, `primary-container`)**: For prominent, high-emphasis components (Call to Actions, Featured elements, Hero sections). This is where our core brand vibrance lives.
-*   **Secondary (`secondary`, `on-secondary`, `secondary-container`)**: Specifically designed to be **lower-chroma/muted** to *de-emphasize* elements. Use for standard tags, secondary buttons, or less important UI elements that need to belong to the brand but fade into the background. **Do not use Secondary to try and make something "vibrant"**.
 *   **Tertiary (`tertiary`, `on-tertiary`, `tertiary-container`)**: For accents and highly expressive interactions. In PsyUI, this is our vivid Orange, perfect for drawing attention to specific badges or flashing on hover/focus (the Tertiary Reversal).
 *   **Error (`error`, `on-error`, `error-container`)**: Destructive actions (e.g., delete buttons, error messages, invalid inputs).
-*   **Surface (`surface`, `on-surface`)**: For pure structural elevation. This is the neutral baseline background color for the page.
-*   **Surface Variants (`surface-variant`, `surface-container-*`)**: Gradations of the surface color used to establish mathematical depth without drop shadows. Use for elevated cards, widgets, or distinct visual groupings.
+*   **Surface (`surface`, `on-surface`)**: For pure structural elevation. This is the background color for the bigger wrappers - like widgets and sections.
+*   **Background (`background`, `on-background`)**: For background and also for neutral. This is the neutral baseline background color for the page.
+
+<!-- *   **Surface Variants (`surface-variant`, `surface-container-*`)**: Gradations of the surface color used to establish mathematical depth without drop shadows. Use for elevated cards, widgets, or distinct visual groupings.
 *   **Inverse (`inverse-surface`, `inverse-primary`)**: Highly contrasting surface (usually dark in light mode) used specifically for transient, floating elements like Snackbars or Toasts.
 *   **Outline (`outline`, `outline-variant`)**: Used strictly for dividers, structural separation lines, and focus/interactive outlines. We do not use outline/border styles on components (cards, buttons, inputs).
 *   **Fixed (`*-fixed`, `*-fixed-dim`)**: Colors that remain constant across Light and Dark modes. Used when a component must maintain a specific color regardless of the active theme (e.g., specific brand badges).
+-->
 
-### M3E State Layers
-Interactive elements must use strict opacity overlays over the base color:
+<!-- ### M3E State Layers
+Interactive elements may opacity overlays over the base color:
 *   **Hover**: 8% opacity overlay
-*   **Focus/Pressed**: 10% opacity overlay
-*   *Implementation:* Use Tailwind opacity modifiers (`bg-on-primary/8`) or CSS variables for state layers. State layer uses the content color.
+*   **Focus/Pressed**: 12% opacity overlay
+*   *Implementation:* Use Tailwind opacity modifiers (e.g., `bg-primary/8`) or CSS variables for state layers.
+-->
 
 ### Elevation & Shadows (Tonal Surfaces)
 M3 Expressive deliberately drops heavy drop shadows and outlines in favor of filled tonal surfaces to create depth. Shadows (`shadow-m3e-*`) are formally deprecated.
-*   Instead of shadows or outlines, we strictly use filled tonal surfaces (`bg-primary-container-fixed`) to separate cards/widgets from the `bg-surface` background.
-*   For floating elements (Dropdowns, Modals), use the `bg-primary-container-fixed` with heavy `backdrop-blur-xl` for distinct z-index layering.
-*   **Hover/Pop Effects**: Interactive cards and images must *not* use box-shadow to indicate a hover state. Instead, use a combination of **scale** (`hover:scale-[1.02]`) and **state layers** (tonal shifts, e.g., `hover:bg-surface-variant`) along with expressive easing (`duration-300 ease-[cubic-bezier(0.2,0,0,1)]`) to create an editorial "pop" effect.
+*   Instead of shadows or outlines, we strictly use filled tonal surfaces (`bg-surface`) to separate cards/widgets from the `bg-background`.
 
 ---
 
@@ -60,7 +61,7 @@ Use pure JS functions returning template literals for all UI elements.
 
 #### B. Tailwind CSS Enforcement
 All HTML strings returned by JS components must strictly use Tailwind utility classes mapping to M3E tokens.
-*   **No Hardcoded Colors:** Use `bg-surface-variant`, `text-on-surface`, never `bg-[#ccc]` or `bg-blue-500`.
+*   **No Hardcoded Colors:** Use `bg-surface`, `text-on-surface`, never `bg-[#ccc]` or `bg-blue-500`.
 *   **Stateful UI (Zero-JS Preference):** Prefer CSS-only state where possible (e.g., `scroll-snap` for carousels) over heavy JS listeners to keep the renderer lightweight.
 
 ### 2.3 Component Nomenclature & Mapping (Legacy to M3E)
@@ -73,7 +74,7 @@ To ensure we align with M3E nomenclature, we map our site sections/features to t
 
 *Blocks / Layouts:*
 *   **Cover / Showcase Blocks:** M3E Hero sections.
-*   **Cards (`src/blocks/card.js`):** Align with M3E Cards. Default to **Filled Cards** (`bg-surface-variant`) for standard content grids. Reserve **Elevated Cards** for active states, hover effects, or floating elements.
+*   **Cards (`src/blocks/card.js`):** Align with M3E Cards. Default to **Filled Cards** (`bg-container`) for standard content grids. Reserve **Elevated Cards** for active states, hover effects, or floating elements.
 *   **List Blocks (`src/blocks/list.js`):** Map to **M3E List Items** (1-line or 2-line). Use consistent hover states and typography.
 *   **Carousel (`src/components/carousel.js`):** Align with M3E Carousel guidelines, strictly maintaining the zero-JS CSS scroll-snap implementation.
 ---
@@ -89,19 +90,16 @@ To ensure we align with M3E nomenclature, we map our site sections/features to t
 *   Use `backdrop-blur-xl` for sticky headers, navigation bars, and overlays to create a premium glassmorphic effect.
 
 ### Brand-Tinted Surface Model (Dark Mode)
-To avoid a stark, monochrome "white/black" aesthetic, Dark Mode surfaces completely abandon flat greys (`#1a1a1a`, `#2b2b2b`) in favor of deep, rich brand blues strictly from the Primary palette. This creates a cohesive, immersive environment:
-*   `surface` & `surface-container`: `#141313` / `#201F1F`
-*   `surface-variant` & `surface-container-high`: `#444748` / `#2A2A2A`
-*   `surface-container-lowest`: `#0E0E0E`
+To avoid a stark, monochrome "white/black" aesthetic, Dark Mode surfaces completely abandon flat greys (except for background) in favor of deep, rich brand blues strictly from the Primary palette. This creates a cohesive, immersive environment.
 
 ### Interaction States (Tertiary Reversal Model)
 *   **Resting State:** The Tertiary color (Orange) must almost *never* be used for resting UI elements. Its primary purpose is to provide high contrast and indicate interactivity.
-*   **Interaction Rule:** To lean into the Expressive aesthetic, everything shifts to Tertiary on interaction. All standard links, icons, text elements, and solid components (like Primary, Secondary, and Tonal buttons) must dynamically swap to the Tertiary tonal scale on hover/focus (e.g., `hover:bg-tertiary` or `hover:text-tertiary`). This creates a highly engaging, consistent interaction language.
+*   **Interaction Rule:** To lean into the Expressive aesthetic, everything shifts to Tertiary on interaction. All standard links, icons, text elements, and solid components (like Primary and Neutral buttons) must dynamically swap to the Tertiary tonal scale on hover/focus (e.g., `hover:bg-tertiary` or `hover:text-tertiary`). This creates a highly engaging, consistent interaction language.
 *   **Reversal Rule:** In the rare case that a component *is* Tertiary in its resting state, it must embrace the "Reversal" model and shift to the Primary tonal scale on interaction (e.g., `bg-tertiary hover:bg-primary`).
 
 ### Loading & Empty States
 *   **Zero Spinners:** Use elegant, pulsating M3E Skeleton UI blocks matching the shape of incoming content to prevent Cumulative Layout Shift (CLS).
-*   **Zero-JS UI:** Prefer native CSS `scroll-snap-type` for carousels.
+*   **Zero-JS UI:** Prefer native CSS `scroll-snap-type` for carousels and `<details>` for accordions.
 
 ---
 
@@ -113,16 +111,20 @@ To avoid a stark, monochrome "white/black" aesthetic, Dark Mode surfaces complet
 
 ## 5. Brand Color Palette (Material 3)
 
-The design system uses a strict Material 3 tonal palette. Avoid using legacy flat color scales.
+### Implemented Palette
+Refer to tailwind.css
+
+### Comprehensive Palette for Reference
+The design system uses a strict Material 3 tonal palette. Colours outside this palette should not be used. Do not add colors from this palette to tailwind.css without my permission. Avoid using legacy flat color scales.
 * LIGHT:
-    primary: #00334D
+    primary: #006699
     surfaceTint: #3B627E
-    onPrimary: #FFFFFF
+    onPrimary: #DDD
     primaryContainer: #CCDDFF
     onPrimaryContainer: #002233
     secondary: #5C5C5C
     onSecondary: #FFFFFF
-    secondaryContainer: #E6e6e6
+    secondaryContainer: #E6E6E6
     onSecondaryContainer: #333333
     tertiary: #CC7000
     onTertiary: #FFFFFF
@@ -145,8 +147,8 @@ The design system uses a strict Material 3 tonal palette. Avoid using legacy fla
     inverseSurface: #313030
     inverseOnSurface: #F4F0EF
     inversePrimary: #A4CBEB
-    primaryFixed: #CAE6FF
-    onPrimaryFixed: #001E2F
+    primaryFixed: #006699
+    onPrimaryFixed: #ddd
     primaryFixedDim: #A4CBEB
     onPrimaryFixedVariant: #214A66
     secondaryFixed: #E3E2E2
@@ -216,7 +218,7 @@ The design system uses a strict Material 3 tonal palette. Avoid using legacy fla
     surfaceContainerHighest: #353434
 
 > [!WARNING]
-> **Strict Implementation Rule:** These raw hex codes are exclusively for configuring the semantic tokens in `tailwind.css`. They must **never** be used directly in the XML components as arbitrary inline values (e.g., `text-[#00aaff]`). Always use the mapped M3E token (e.g., `text-primary-container`).
+> **Strict Implementation Rule:** These raw hex codes are exclusively for configuring the semantic tokens in `tailwind.css`. They must **never** be used directly in the XML components as arbitrary inline values (e.g., `text-[#00aaff]`). Always use the mapped M3E token (e.g., `text-primary`).
 
 ---
 

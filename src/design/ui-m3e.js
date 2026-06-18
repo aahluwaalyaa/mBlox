@@ -7,7 +7,7 @@ import { renderBlockFooter } from '../sections/footer.js';
 import { renderStageLayout } from '../layouts/stage.js';
 import { renderCarouselIndicators, initCarousel } from '../components/carousel.js';
 import { renderNavigationControls } from '../components/navigation.js';
-import { 
+import {
     BLOCK_COVER, BLOCK_SHOWCASE, BLOCK_LIST, BLOCK_CARD, BLOCK_GALLERY,
     BLOCK_PANCAKE, BLOCK_STACK, BLOCK_QUOTE, BLOCK_COMMENT,
     RESPONSIVE_GRID_CLASSES_M3E, noImg
@@ -38,7 +38,7 @@ const renderers = {
 };
 
 export class M3ERenderer {
-    
+
     async buildBlockBody(response, config) {
         let blockBody = '';
         let showcaseHTML = '';
@@ -71,8 +71,8 @@ export class M3ERenderer {
         for (let postID = 0; postID < postsInFeed; postID++) {
             const post = response.posts[postID];
             let currentColumnCount = config.columnCount;
-            
-            let finalType = config.blockType; 
+
+            let finalType = config.blockType;
             if (config.blockType === BLOCK_LIST && postID > 0) {
                 finalType = config.showHeader ? BLOCK_STACK : BLOCK_CARD;
                 if (postID === 1 && config.showHeader) currentColumnCount--;
@@ -123,7 +123,7 @@ export class M3ERenderer {
 
             const title = shareBtn.getAttribute('data-title');
             const url = shareBtn.getAttribute('data-url');
-            
+
             if (navigator.share) {
                 try {
                     await navigator.share({ title: title, url: url });
@@ -140,10 +140,10 @@ export class M3ERenderer {
 
     _bindShowcaseEvents(rawElement, config) {
         if (rawElement.dataset.showcaseBound) return;
-        
+
         const featuredImageNode = rawElement.closest('.mBlock, .mBlockL')?.querySelector('.feature-image');
         if (!featuredImageNode) return;
-        
+
         rawElement.dataset.showcaseBound = "true";
 
         const figureNode = featuredImageNode.querySelector('figure');
@@ -159,7 +159,7 @@ export class M3ERenderer {
                         iFrameNode.style.display = '';
                         iFrameNode.style.opacity = '1';
                         iFrameNode.classList.remove('hidden');
-                        
+
                         figureNode.style.display = 'none';
                         if (contentNode) contentNode.style.display = 'none';
                         const link = featuredImageNode.querySelector('a');
@@ -187,7 +187,7 @@ export class M3ERenderer {
 
         rawElement.addEventListener('click', function (event) {
             const clickedPost = event.target.closest('.sPost');
-            if (!clickedPost) return; 
+            if (!clickedPost) return;
 
             // Only act if this post is part of a showcase grid (sFeature)
             if (!clickedPost.closest('.sFeature')) return;
@@ -251,7 +251,7 @@ export class M3ERenderer {
                         const titleLink = h5.closest('a');
                         if (titleLink) titleLink.href = data.link;
                     }
-                    
+
                     const ctaLink = contentNode.querySelector('.js-cta-link');
                     if (ctaLink) {
                         ctaLink.href = data.link;
@@ -288,12 +288,12 @@ export class M3ERenderer {
                 if (currentStage <= 1) return;
                 const prevStage = currentStage - 1;
                 rawElement.setAttribute("data-s", prevStage);
-                
+
                 rawElement.style.minHeight = rawElement.clientHeight + 'px';
-                
+
                 fadeOut(rawElement.querySelector(`div#m${config.mBlockID}-st${currentStage}`));
                 fadeOut(rawElement.querySelector(`div.mblox-footer.st${currentStage}`));
-                
+
                 setTimeout(() => {
                     fadeIn(rawElement.querySelector(`div#m${config.mBlockID}-st${prevStage}`));
                     fadeIn(rawElement.querySelector(`div.mblox-footer.st${prevStage}`));
@@ -309,16 +309,16 @@ export class M3ERenderer {
                 const currentStage = parseInt(rawElement.getAttribute("data-s"), 10);
                 const nextStage = currentStage + 1;
                 rawElement.setAttribute("data-s", nextStage);
-                
+
                 rawElement.style.minHeight = rawElement.clientHeight + 'px';
                 rawElement.classList.add('relative');
 
                 fadeOut(rawElement.querySelector(`div#m${config.mBlockID}-st${currentStage}`));
                 const currentFooter = rawElement.querySelector(`div.mblox-footer.st${currentStage}`);
                 if (currentFooter) fadeOut(currentFooter);
-                
+
                 const nextStageEl = rawElement.querySelector(`div#m${config.mBlockID}-st${nextStage}`);
-                
+
                 if (nextStageEl) {
                     setTimeout(() => {
                         fadeIn(nextStageEl);
@@ -335,10 +335,10 @@ export class M3ERenderer {
                         }
                     </style>
                     <div id="m${config.mBlockID}-st${nextStage}-loading" class="absolute inset-0 flex items-center justify-center z-10" style="min-height: 200px;">
-                        <svg class="w-12 h-12 text-current opacity-80" viewBox="0 0 56 56" style="--scroll-progress: 0; animation: mblox-loader-anim 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;"><use href="#icon-progress-m3e"></use></svg>
+                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 56 56" style="--scroll-progress: 0; animation: mblox-loader-anim 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;"><use href="#icon-progress-m3e"></use></svg>
                     </div>`;
                     rawElement.insertAdjacentHTML('beforeend', skeletonHtml);
-                    
+
                     const customEvent = new CustomEvent('mblox:loadNextPage', { detail: { element: rawElement } });
                     rawElement.dispatchEvent(customEvent);
                 }

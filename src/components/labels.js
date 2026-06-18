@@ -38,7 +38,7 @@ export function renderLabels(config, labels, siteUrl) {
     const labelsHTML = displayLabels.map(label => {
         const encodedLabel = encodeURIComponent(label);
         const displayString = label.startsWith('#') ? label.replace(/\s+/g, '') : `#${label.replace(/\s+/g, '')}`;
-        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full transition-opacity duration-300 ease-[--ease-m3-emphasized] cursor-pointer ${config.palette.bg} ${config.palette.text} ${config.palette.hoverBg} ${config.palette.hoverText} opacity-75 hover:opacity-100 h-6 px-3 text-label-md no-underline" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
+        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full transition-opacity duration-300 ease-[--ease-m3-emphasized] cursor-pointer ${config.palette.bg} ${config.palette.text} ${config.palette.hoverBg} ${config.palette.hoverText} opacity-50 hover:opacity-100 h-6 px-3 text-label-md no-underline" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
     }).join('');
 
     return `

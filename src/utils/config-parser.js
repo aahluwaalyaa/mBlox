@@ -64,8 +64,8 @@ export function parseBlockConfig(rawElement) {
             let textContent = scriptTag.textContent || "";
             // Remove CDATA tags often automatically injected by CMS platforms like Blogger
             textContent = textContent.replace(/(?:\/\/\s*)?<!\[CDATA\[/g, '')
-                                     .replace(/(?:\/\/\s*)?\]\]>/g, '')
-                                     .trim();
+                .replace(/(?:\/\/\s*)?\]\]>/g, '')
+                .trim();
             jsonConfig = JSON.parse(textContent);
         } catch (e) {
             console.error("mBlox: Failed to parse embedded JSON configuration.", e);
@@ -137,7 +137,7 @@ export function parseBlockConfig(rawElement) {
     const mBloxTheme = validThemes.includes(rawTheme) ? rawTheme : 'auto';
 
     const colorPalette = String(getVal("palette", "palette", "surface")).toLowerCase();
-    
+
     let finalPaletteName = colorPalette;
     if (!M3E_PALETTES[finalPaletteName]) {
         finalPaletteName = 'surface';
@@ -151,14 +151,14 @@ export function parseBlockConfig(rawElement) {
     const mBlockID = widget ? widget.getAttribute("ID") : (mBloxTitle + mBloxType + labelName);
     const sanitizedMBlockID = mBlockID.replace(/[\s#.&?,[\]]/g, '-');
 
-    const dateOptions = dateStyle === 'long' 
-        ? { year: 'numeric', month: 'short', day: 'numeric' } 
+    const dateOptions = dateStyle === 'long'
+        ? { year: 'numeric', month: 'short', day: 'numeric' }
         : { month: 'short', day: 'numeric' };
     const dateFormatter = showDate ? new Intl.DateTimeFormat('en-US', dateOptions) : null;
 
     const columnCountVal = getVal("cols", "cols", null);
     const blockRowsVal = getVal("rows", "rows", "1");
-    
+
     const overlayItemsRaw = String(getVal("overlay-items", "overlayItems", "vcasb")).toLowerCase();
     const overlayItems = overlayItemsRaw.split('');
 
@@ -185,9 +185,7 @@ export function parseBlockConfig(rawElement) {
         moreText: getVal("moreText", "moreText", ""),
         stageID, firstInstance, postsPerBlock, mBlockID: sanitizedMBlockID, dateFormatter, dateStyle,
         paletteName: colorPalette, mBloxTheme,
-        interactionClasses: colorPalette === 'colorful'
-            ? `transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] ${bloxType === 'p' || bloxType === 'q' ? '' : 'hover:bg-tertiary hover:text-on-tertiary '}hover:scale-[1.02] hover:opacity-100 overflow-hidden no-underline font-bold`
-            : `transition-all duration-300 ease-[cubic-bezier(0.2,0,0,1)] hover:scale-[1.02] ${bloxType === 'p' || bloxType === 'q' ? '' : 'hover:bg-surface-variant '}overflow-hidden no-underline font-bold`,
+        interactionClasses: `transition-all duration-300 ease-m3-emphasized ${bloxType === 'p' || bloxType === 'q' ? '' : `${palette.hoverBg} ${palette.hoverText}`} hover:opacity-100 overflow-hidden font-bold`,
         containsNavigation: false, actualColumnCount: 0,
         overlayItems,
     };

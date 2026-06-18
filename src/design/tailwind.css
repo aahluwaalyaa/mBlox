@@ -3,6 +3,7 @@
 /* Tell Tailwind v4 where to scan for classes */
 @source "../**/*.js";
 @source "../../demo/**/*.html";
+@source inline("line-clamp-1 line-clamp-2 line-clamp-3 line-clamp-4 line-clamp-5 line-clamp-6");
 
 @theme {
   /* ─── M3E BREAKPOINTS ────────────────────────────────────────────────────────
@@ -17,79 +18,35 @@
   --color-*: initial;
   --text-*: initial;
   --shadow-*: initial;
+  --drop-*: initial;
 
-  /* ─── ESSENTIAL COLORS ───────────────────────────────────────────────────────
-     Restore native CSS colors stripped by the purge above. */
-  --color-transparent: transparent;
-  --color-current: currentColor;
-  --color-black: #000;
-  --color-white: #fff;
+  /* ─── SURFACES ────── */
+  --color-background: #ddd;
+  --color-on-background: #333;
+  --color-surface: #00669911;
+  --color-on-surface: #00334D;
+  --color-surface-container: #F1EDEC;
 
-  /* ─── PRIMARY ──────────────────────────────────────────────────────────────── */
+  /* ─── PRIMARY ────── */
   --color-primary: #006699;
-  --color-on-primary: #DDD;
-  --color-primary-container: #CCDDFF;
-  --color-on-primary-container: #002233;
-  --color-inverse-primary: #A4CBEB;
+  --color-on-primary: #CCC;
+  --color-primary-container: #00669922;
+  --color-on-primary-container: #00334d;
 
-  /* ─── SECONDARY ────────────────────────────────────────────────────────────── */
+  /* ─── SECONDARY ────────── */
   --color-secondary: #5C5C5C;
   --color-on-secondary: #FFFFFF;
   --color-secondary-container: #E6E6E6;
   --color-on-secondary-container: #333333;
 
-  /* ─── TERTIARY ─────────────────────────────────────────────────────────────── */
+  /* ─── TERTIARY ───── */
   --color-tertiary: #CC7000;
   --color-on-tertiary: #FFFFFF;
   --color-tertiary-container: #EECC99;
   --color-on-tertiary-container: #332200;
 
-  /* ─── ERROR ────────────────────────────────────────────────────────────────── */
-  --color-error: #CC3333;
-  --color-on-error: #FFFFFF;
-  --color-error-container: #FFEDEB;
-  --color-on-error-container: #CC1111;
-
-  /* ─── BACKGROUND & SURFACE ─────────────────────────────────────────────────── */
-  --color-background: #F9F9FB;
-  --color-on-background: #1A1C1E;
-  --color-surface: #FCF8F8;
-  --color-on-surface: #1C1B1B;
-  --color-surface-variant: #E0E3E3;
-  --color-on-surface-variant: #444748;
-  --color-surface-tint: #3B627E;
-  --color-inverse-surface: #313030;
-  --color-inverse-on-surface: #F4F0EF;
-  --color-surface-dim: #DDD9D9;
-  --color-surface-bright: #FCF8F8;
-  --color-surface-container-lowest: #FFFFFF;
-  --color-surface-container-low: #F7F3F2;
-  --color-surface-container: #F1EDEC;
-  --color-surface-container-high: #EBE7E7;
-  --color-surface-container-highest: #E5E2E1;
-
-  /* ─── FIXED ────────────────────────────────────────────────────────────────── */
-
-  --color-primary-fixed: #006699;
-  --color-on-primary-fixed: #ddd;
-  --color-primary-container-fixed: #00334D;
-  --color-on-primary-container-fixed: #ddd;
-  --color-primary-fixed-dim: #A4CBEB;
-  --color-on-primary-fixed-variant: #214A66;
-  --color-secondary-fixed: #E3E2E2;
-  --color-on-secondary-fixed: #1B1C1C;
-  --color-secondary-fixed-dim: #C7C6C6;
-  --color-on-secondary-fixed-variant: #464747;
-  --color-tertiary-fixed: #FFDCC2;
-  --color-on-tertiary-fixed: #2E1500;
-  --color-tertiary-fixed-dim: #FFB77C;
-  --color-on-tertiary-fixed-variant: #6D3900;
-
   /* ─── OUTLINE & SCRIM ──────────────────────────────────────────────────────── */
   --color-outline: #747878;
-  --color-outline-variant: #C4C7C7;
-  --color-scrim: #000000;
-  --color-shadow: #000000;
 
   /* ─── STATUS / SEMANTIC ──────────────────────────────────────────────────────
      Non-M3E extras kept for notification/alert UIs (info banners, toasts). */
@@ -97,7 +54,13 @@
   --color-success: #009485;
   --color-warning: #b36200;
 
-  /* ─── FONTS ──────────────────────────────────────────────────────────────────*/
+  /* ─── ERROR ──────── */
+  --color-error: #CC3333;
+  --color-on-error: #FFFFFF;
+  --color-error-container: #FFEDEB;
+  --color-on-error-container: #CC1111;
+
+  /* ─── FONTS ──────*/
   --font-system: inherit;
 
   --font-primary: var(--font-system);
@@ -148,38 +111,29 @@
   --text-label-sm--line-height: 1rem;
   --text-label-sm--font-weight: 500;
 
-  /* ─── MATERIAL DESIGN 3 ELEVATIONS ───────────────────────────────────────────
-  --shadow-m3e-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-  --shadow-m3e-2: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
-  --shadow-m3e-3: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);*/
-
-  /* ─── MATERIAL 3 EXPRESSIVE RADII ───────────────────────────────────────────
-  --radius-m3e-sm: 8px;
-  --radius-m3e-md: 12px;
-  --radius-m3e-lg: 16px;
-  --radius-m3e-xl: 24px;
-  --radius-m3e-2xl: 32px;*/
-
   /* ─── MATERIAL 3 EASING ───────────────────────────────────────────────────*/
   --ease-m3-emphasized: cubic-bezier(0.2, 0.0, 0.0, 1.0);
-  --ease-m3-standard: cubic-bezier(0.2, 0.0, 0, 1.0);
 }
 
 @layer base {
   body {
     font-family: var(--font-primary);
-    @apply text-on-surface bg-surface;
+    @apply text-body-lg text-on-background bg-background;
   }
-}
+
+  a {
+    @apply transition-all duration-300 ease-[--ease-m3-emphasized] hover:text-tertiary;
+  }
+
 
   /* ─── Light Mode Overrides ───────────────────────────────────────────
      Forces light mode tokens when explicitly requested. */
-  [data-scheme="light"], [data-theme="light"] {
+  [data-scheme="light"],
+  [data-theme="light"] {
     --color-primary: #006699;
     --color-on-primary: #DDD;
     --color-primary-container: #CCDDFF;
     --color-on-primary-container: #002233;
-    --color-inverse-primary: #A4CBEB;
 
     --color-secondary: #5C5C5C;
     --color-on-secondary: #FFFFFF;
@@ -200,49 +154,24 @@
     --color-on-background: #1A1C1E;
     --color-surface: #FCF8F8;
     --color-on-surface: #1C1B1B;
-    --color-surface-variant: #E0E3E3;
-    --color-on-surface-variant: #444748;
-    --color-surface-tint: #3B627E;
-    --color-inverse-surface: #313030;
-    --color-inverse-on-surface: #F4F0EF;
-    --color-surface-dim: #DDD9D9;
-    --color-surface-bright: #FCF8F8;
-    --color-surface-container-lowest: #FFFFFF;
-    --color-surface-container-low: #F7F3F2;
     --color-surface-container: #F1EDEC;
-    --color-surface-container-high: #EBE7E7;
-    --color-surface-container-highest: #E5E2E1;
-
-    --color-primary-fixed: #006699;
-    --color-on-primary-fixed: #ddd;
-    --color-primary-container-fixed: #00334D;
-    --color-on-primary-container-fixed: #ddd;
-    --color-primary-fixed-dim: #A4CBEB;
-    --color-on-primary-fixed-variant: #214A66;
-    --color-secondary-fixed: #E3E2E2;
-    --color-on-secondary-fixed: #1B1C1C;
-    --color-secondary-fixed-dim: #C7C6C6;
-    --color-on-secondary-fixed-variant: #464747;
-    --color-tertiary-fixed: #FFDCC2;
-    --color-on-tertiary-fixed: #2E1500;
-    --color-tertiary-fixed-dim: #FFB77C;
-    --color-on-tertiary-fixed-variant: #6D3900;
 
     --color-outline: #747878;
-    --color-outline-variant: #C4C7C7;
-    --color-shadow: #000000;
-    --color-scrim: #000000;
   }
+
   /* ─── Dark Mode Overrides ───────────────────────────────────────────
      Remaps all M3E color tokens for dark mode. */
-  [data-scheme="dark"], [data-theme="dark"] {
-    --color-surface-tint: #A4CBEB;
-    --color-inverse-primary: #3B627E;
+  [data-scheme="dark"],
+  [data-theme="dark"] {
+    --color-background: #141313;
+    --color-on-background: #ddd;
+    --color-surface: #00334D66;
+    --color-on-surface: #aaa;
 
-    --color-secondary: #C7C6C6;
-    --color-on-secondary: #303031;
-    --color-secondary-container: #222222;
-    --color-on-secondary-container: #E6e6e6;
+    --color-primary: #006699;
+    --color-on-primary: #ccc;
+    --color-primary-container: #00334D99;
+    --color-on-primary-container: #aaa;
 
     --color-tertiary: #FFB77C;
     --color-on-tertiary: #4D2700;
@@ -254,45 +183,13 @@
     --color-error-container: #CC3333;
     --color-on-error-container: #FFEDEB;
 
-    --color-background: #121415;
-    --color-on-background: #E2E2E5;
-    --color-surface: #141313;
-    --color-on-surface: #E5E2E1;
-    --color-surface-variant: #444748;
-    --color-on-surface-variant: #C4C7C7;
-    --color-surface-dim: #141313;
-    --color-surface-bright: #3A3939;
-    --color-surface-container-lowest: #0E0E0E;
-    --color-surface-container-low: #1C1B1B;
     --color-surface-container: #201F1F;
-    --color-surface-container-high: #2A2A2A;
-    --color-surface-container-highest: #353434;
-    --color-inverse-surface: #E5E2E1;
-    --color-inverse-on-surface: #313030;
-
-    --color-primary-fixed: #CAE6FF;
-    --color-on-primary-fixed: #001E2F;
-    --color-primary-fixed-dim: #A4CBEB;
-    --color-on-primary-fixed-variant: #214A66;
-    --color-secondary-fixed: #E3E2E2;
-    --color-on-secondary-fixed: #1B1C1C;
-    --color-secondary-fixed-dim: #C7C6C6;
-    --color-on-secondary-fixed-variant: #464747;
-    --color-tertiary-fixed: #FFDCC2;
-    --color-on-tertiary-fixed: #2E1500;
-    --color-tertiary-fixed-dim: #FFB77C;
-    --color-on-tertiary-fixed-variant: #6D3900;
 
     --color-outline: #8E9192;
-    --color-outline-variant: #444748;
-    --color-shadow: #000000;
-    --color-scrim: #000000;
   }
 
   @media (prefers-color-scheme: dark) {
     :root:not([data-scheme="light"]):not([data-theme="light"]) {
-      --color-surface-tint: #A4CBEB;
-      --color-inverse-primary: #3B627E;
 
       --color-secondary: #C7C6C6;
       --color-on-secondary: #303031;
@@ -313,34 +210,9 @@
       --color-on-background: #E2E2E5;
       --color-surface: #141313;
       --color-on-surface: #E5E2E1;
-      --color-surface-variant: #444748;
-      --color-on-surface-variant: #C4C7C7;
-      --color-surface-dim: #141313;
-      --color-surface-bright: #3A3939;
-      --color-surface-container-lowest: #0E0E0E;
-      --color-surface-container-low: #1C1B1B;
       --color-surface-container: #201F1F;
-      --color-surface-container-high: #2A2A2A;
-      --color-surface-container-highest: #353434;
-      --color-inverse-surface: #E5E2E1;
-      --color-inverse-on-surface: #313030;
-
-      --color-primary-fixed: #CAE6FF;
-      --color-on-primary-fixed: #001E2F;
-      --color-primary-fixed-dim: #A4CBEB;
-      --color-on-primary-fixed-variant: #214A66;
-      --color-secondary-fixed: #E3E2E2;
-      --color-on-secondary-fixed: #1B1C1C;
-      --color-secondary-fixed-dim: #C7C6C6;
-      --color-on-secondary-fixed-variant: #464747;
-      --color-tertiary-fixed: #FFDCC2;
-      --color-on-tertiary-fixed: #2E1500;
-      --color-tertiary-fixed-dim: #FFB77C;
-      --color-on-tertiary-fixed-variant: #6D3900;
 
       --color-outline: #8E9192;
-      --color-outline-variant: #444748;
-      --color-shadow: #000000;
-      --color-scrim: #000000;
     }
   }
+}

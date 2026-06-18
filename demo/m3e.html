@@ -10,12 +10,30 @@
     <meta name="referrer" content="origin" />
     <link rel="icon" href="data:,">
     <script>
-    window.mBloxConfig = {
-        cssSrc: '../dist/mBloxM3E.css',
-        jsSrc: '../dist/mBloxM3E.js'
-    };
+        window.mBloxConfig = {
+            cssSrc: '../dist/mBloxM3E.css',
+            jsSrc: '../dist/mBloxM3E.js'
+        };
     </script>
     <script src="../mBloxCall.js"></script>
+    <style>
+        body {
+            background: #888;
+            margin: 0;
+        }
+
+        section[data-theme="light"],
+        .mBlockL[data-theme="light"] {
+            background: #333;
+            padding: 8px;
+        }
+
+        section[data-theme="dark"],
+        .mBlockL[data-theme="dark"] {
+            background: #ddd;
+            padding: 8px;
+        }
+    </style>
 </head>
 
 <body>

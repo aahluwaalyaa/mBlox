@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "build": "npm run build:css && npm run build:icons && npm run build:js",
-    "build:css": "npx @tailwindcss/cli -i ./src/design/tailwind.css -o ./dist/mBloxM3E.css --minify",
+    "build:css": "node scripts/build-css.js",
     "build:icons": "node scripts/build-icons.js",
     "build:js": "node scripts/build-js.js",
     "dev": "npx -y serve .",

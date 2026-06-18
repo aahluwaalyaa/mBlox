@@ -173,7 +173,6 @@ For Tailwind v4 (CSS-based config):
 / Define your M3E theme variables here */ 
 @theme {
 --color-primary: #006699;
---color-surface-variant: #e0e3e3;
 /* Add other necessary M3E colors */ 
 } 
 `
@@ -186,7 +185,7 @@ For Tailwind v3 (Legacy tailwind.config.js):
 } 
 ```
 
-Important Note: Because mBlox relies heavily on M3E semantic tokens (e.g., bg-surface-variant, text-on-primary), you must define these custom colors in your Tailwind theme. If you omit them, Tailwind won't output the corresponding styles, resulting in unstyled elements.
+Important Note: Because mBlox relies heavily on M3E semantic tokens (e.g., bg-surface, text-on-primary), you must define these custom colors in your Tailwind theme. If you omit them, Tailwind won't output the corresponding styles, resulting in unstyled elements.
 
 ## Configuration
 
@@ -203,7 +202,7 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | `data-theme` | `theme` | Force theme: `light`, `dark`, or `auto`. | `auto` |
 | `data-s` | `s` | Stage ID for coordinating multiple blocks. | `1` |
 | `data-posts` | `posts` | Number of posts to fetch/display. | `3` |
-| `data-palette` | `palette` | Color palette (e.g., `surface`, `colorful`). | `surface` |
+| `data-palette` | `palette` | Color palette (e.g., `surface`). | `surface` |
 | `data-textVAlign` | `textVAlign` | Vertical alignment of text (`top`, `middle`, `bottom`, `overlay`). | Varies |
 | `data-textHAlign` | `textHAlign` | Horizontal alignment of text (`left`, `center`, `right`). | Varies |
 | `data-iBlur` | `iBlur` | Blur the background image (`true` or `false`). | Varies |

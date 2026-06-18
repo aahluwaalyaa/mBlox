@@ -68,7 +68,7 @@ export const RESPONSIVE_GRID_CLASSES_M3E = {
 export const M3E_PALETTES = {
     'surface': {
         bg: 'bg-surface', text: 'text-on-surface', glass: 'bg-surface/20',
-        hoverBg: 'hover:bg-surface', hoverText: 'hover:text-on-surface',
+        hoverBg: 'hover:bg-tertiary', hoverText: 'hover:text-on-tertiary',
         containerBg: 'bg-surface-container', containerText: 'text-on-surface', containerGlass: 'bg-surface-container/20'
     },
     'primary': {
@@ -83,10 +83,12 @@ export const M3E_PALETTES = {
     },
     'tertiary': {
         bg: 'bg-tertiary', text: 'text-on-tertiary', glass: 'bg-tertiary/20',
+        hoverBg: 'hover:bg-tertiary-container', hoverText: 'hover:text-on-tertiary-container',
         containerBg: 'bg-tertiary-container', containerText: 'text-on-tertiary-container', containerGlass: 'bg-tertiary-container/20'
     },
     'error': {
         bg: 'bg-error', text: 'text-on-error', glass: 'bg-error/20',
+        hoverBg: 'hover:bg-error-container', hoverText: 'hover:text-on-error-container',
         containerBg: 'bg-error-container', containerText: 'text-on-error-container', containerGlass: 'bg-error-container/20'
     }
 };
@@ -109,13 +111,4 @@ export const ASPECT_RATIO_CLASSES = {
     '9/16': 'aspect-[9/16]',
     '9/21': 'aspect-[9/21]',
     '21/9': 'aspect-[21/9]'
-};
-
-export const LINE_CLAMP_CLASSES = {
-    1: 'line-clamp-1 min-h-[1.5em]',
-    2: 'line-clamp-2 min-h-[3em]',
-    3: 'line-clamp-3 min-h-[4.5em]',
-    4: 'line-clamp-4 min-h-[6em]',
-    5: 'line-clamp-5 min-h-[7.5em]',
-    6: 'line-clamp-6 min-h-[9em]'
 };
