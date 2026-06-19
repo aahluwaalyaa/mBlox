@@ -14,8 +14,8 @@ export function render(post, postID, config) {
             </div>
         ` : '';
 
-        const blockClasses = ['flex', 'flex-col', 'w-full', config.palette.containerBg, config.palette.containerText, config.cornerStyle, `text-${config.textHAlign}`, 'h-full', config.interactionClasses].filter(Boolean).join(' ');
-        const articleClasses = '@container col-span-1 inline-flex w-full relative';
+        const blockClasses = ['flex', 'flex-col', 'w-full', config.cornerStyle, `text-${config.textHAlign}`, 'h-full', config.wrapperUI].filter(Boolean).join(' ');
+        const articleClasses = '@container col-span-1 inline-flex w-full relative h-full';
 
         return `<article class="${articleClasses}" role="article"><div class="${blockClasses}">${parts.finalImageCode}${textContentHTML}</div></article>`;
     });

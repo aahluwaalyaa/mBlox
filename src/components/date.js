@@ -26,6 +26,6 @@ export function renderDate(finalType, config, publishedDate, updatedDate) {
         const textClass = config.palette.text || 'text-on-surface';
         return `<div class="flex items-center gap-2"><span class="${bgClass} ${textClass} px-2 py-0.5 rounded-sm text-label-sm font-bold uppercase tracking-wider">Updated</span><span class="text-label-md font-light">${formattedDate}</span></div>`;
     } else {
-        return `<span class="text-label-md font-light">Published ${formattedDate}</span>`;
+        return `<span class="text-label-md font-light">Posted ${formattedDate}</span>`;
     }
 }

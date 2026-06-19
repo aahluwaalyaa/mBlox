@@ -5,6 +5,7 @@ import { renderDate } from '../components/date.js';
 import { renderTitle } from '../components/title.js';
 import { renderSnippet } from '../components/snippet.js';
 import { renderLabels } from '../components/labels.js';
+import { renderImageOverlay } from '../components/overlay.js';
 import { BLOCK_SHOWCASE, noImg } from '../core/config.js';
 
 import { getYouTubeVideoId, getVideoIcon } from '../components/video.js';
@@ -55,8 +56,8 @@ export function render(post, postID, config) {
             const ctaWidth = config.showHeader ? 'w-full @md:w-auto' : 'w-full';
             const ctaCode = cta ? `<div class="flex-shrink-0 ${ctaMargin}flex items-center ${ctaAlignClass} ${ctaWidth}">${cta}</div>` : '';
 
-            const wrapperClasses = config.showHeader ? `${config.palette.containerGlass} backdrop-blur-xl ` : '';
-            showcaseContent = `<div class="absolute inset-0 flex flex-col justify-end p-0 z-10 pointer-events-none w-full overflow-hidden"><div class="sContent w-full flex flex-col @md:flex-row items-start @md:items-center justify-between p-2 @xs:p-4 @sm:px-12 ${wrapperClasses}${config.palette.containerText} pointer-events-auto">${hsCode}${ctaCode}</div></div>`;
+            const wrapperClasses = config.showHeader ? `${config.wrapperUI} backdrop-blur-xl ` : '';
+            showcaseContent = `<div class="absolute inset-0 flex flex-col justify-end p-0 z-10 pointer-events-none w-full overflow-hidden"><div class="sContent w-full flex flex-col @md:flex-row items-start @md:items-center justify-between p-2 @xs:p-4 @sm:px-12 ${wrapperClasses}pointer-events-auto">${hsCode}${ctaCode}</div></div>`;
         }
 
         const linkWrapper = `<a href="${post.url}" class="absolute inset-0 z-30" title="${post.title.replace(/"/g, '&quot;')}" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>`;
@@ -66,8 +67,8 @@ export function render(post, postID, config) {
 
     // Showcase grid post
     const videoAttr = (videoID && videoID !== 'noVideo') ? ` data-vidid="${videoID}"` : '';
-    const ringClasses = (postID === 0 && config.firstInstance) ? ' ring-4 ring-current ring-inset' : '';
-    const articleClasses = `@container col-span-1 inline-flex w-full sPost cursor-pointer relative ${config.interactionClasses}${ringClasses}`;
+    const ringClasses = (postID === 0 && config.firstInstance) ? ' ring-4 ring-inset' : '';
+    const articleClasses = `@container col-span-1 inline-flex w-full h-full sPost cursor-pointer relative ${ringClasses}`;
     let imageHigh = noImg;
     if (videoID && videoID !== 'noVideo') imageHigh = `https://i.ytimg.com/vi/${videoID}/maxresdefault.jpg`;
     else if (post.thumbnailUrl) imageHigh = post.thumbnailUrl.replace(/\/s\d+(-[a-z]\d+)*(-c)?/, '/s1600');
@@ -98,7 +99,8 @@ export function renderThumbnail(post, config) {
     const articleDataAttributes = `data-title="${post.title}" data-link="${post.url}" data-summary="${snippetText}"${videoAttr} data-toggle="tooltip"`;
     const imageTag = `<img class="w-full h-full object-cover${lazyLoadClass}" src="${thumbnailUrl}" data-img-high="${highResUrl}" alt="${post.title.replace(/"/g, '&quot;')} image" loading="lazy" title="${post.title.replace(/"/g, '&quot;')}" />`;
     const youtubeIcon = getVideoIcon(videoID);
-    const figureTag = `<figure class="m-0 w-full ${config.aspectRatio.trim()} overflow-hidden ${config.cornerStyle} relative">${imageTag}${youtubeIcon}</figure>`;
+    const overlayCode = renderImageOverlay(post, config);
+    const figureTag = `<figure class="m-0 w-full ${config.aspectRatio.trim()} overflow-hidden ${config.cornerStyle} relative">${imageTag}${overlayCode}${youtubeIcon}</figure>`;
 
-    return `<article class="col-span-1 inline-flex w-full sPost cursor-pointer relative ${config.interactionClasses}" ${articleDataAttributes} title="${post.title.replace(/"/g, '&quot;')}" role="article">${figureTag}</article>`;
+    return `<article class="col-span-1 inline-flex w-full h-full sPost cursor-pointer relative" ${articleDataAttributes} title="${post.title.replace(/"/g, '&quot;')}" role="article">${figureTag}</article>`;
 }

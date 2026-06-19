@@ -16,12 +16,12 @@ export function getYouTubeVideoId(post) {
 
 export function getVideoIcon(videoID) {
     if (!videoID || videoID === 'noVideo') return '';
-    return `<svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 text-on-error z-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><use href="#icon-youtube"></use></svg>`;
+    return `<svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 z-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><use href="#icon-youtube"></use></svg>`;
 }
 
 export function getShowcaseVideoIcon(videoID) {
     if (!videoID || videoID === 'noVideo') return '';
-    return `<svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 text-on-error z-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><use href="#icon-youtube"></use></svg>`;
+    return `<svg class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 z-10 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16"><use href="#icon-youtube"></use></svg>`;
 }
 
 export function getVideoIframe(videoID, config) {

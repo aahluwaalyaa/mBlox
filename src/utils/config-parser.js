@@ -136,11 +136,11 @@ export function parseBlockConfig(rawElement) {
     const validThemes = ['light', 'dark', 'auto'];
     const mBloxTheme = validThemes.includes(rawTheme) ? rawTheme : 'auto';
 
-    const colorPalette = String(getVal("palette", "palette", "surface")).toLowerCase();
+    const colorPalette = String(getVal("palette", "palette", "primary")).toLowerCase();
 
     let finalPaletteName = colorPalette;
     if (!M3E_PALETTES[finalPaletteName]) {
-        finalPaletteName = 'surface';
+        finalPaletteName = 'primary';
     }
     const palette = M3E_PALETTES[finalPaletteName];
     let textVerticalAlign = String(getVal("textVAlign", "textVAlign", "")).toLowerCase();
@@ -162,6 +162,13 @@ export function parseBlockConfig(rawElement) {
     const overlayItemsRaw = String(getVal("overlay-items", "overlayItems", "vcasb")).toLowerCase();
     const overlayItems = overlayItemsRaw.split('');
 
+    const transitionClass = 'transition-all duration-300 ease-m3-emphasized';
+    const controlUI = `${transitionClass} ${palette.bg} ${palette.text} ${palette.hoverBg} ${palette.hoverText} font-bold`;
+    const wrapperUI = `${transitionClass} ${palette.containerBg} ${palette.containerText} ${palette.containerHoverBg} ${palette.containerHoverText}`;
+    const chipUI = (colorPalette === 'primary')
+        ? `${transitionClass} ${palette.containerBg} ${palette.containerText} ${palette.hoverBg} ${palette.hoverText}`
+        : controlUI;
+
     let config = {
         labelName: labelName, contentType, siteURL, mBlockTitle: mBloxTitle, mBlockDescription: mBloxDescription, blockType: bloxType,
         showHeader, showImage, showSnippet, showAuthor, showDate, showOverlay, showLabels,
@@ -178,6 +185,8 @@ export function parseBlockConfig(rawElement) {
         aspectRatio: ` ${ASPECT_RATIO_CLASSES[String(getVal("ar", "ar", "1/1")).replace('x', '/').toLowerCase()] || 'aspect-square'}`,
         isImageFixed: imageFixed === "true" || jsonConfig.iFix === true ? true : (imageFixed === "false" || jsonConfig.iFix === false ? false : null),
         hasRoundedBorder: getBoolVal("iBorder", "iBorder", false),
+        imgVignette: getBoolVal("imgVignette", "imgVignette", bloxType !== 'c'),
+        moreLink: getVal("moreLink", "moreLink", ""),
         snippetLines: getIntVal("snippetLines", "snippetLines", 3),
         callToAction: getVal("CTAText", "CTAText", ""),
         ctaAlign: getVal("ctaAlign", "ctaAlign", ""),
@@ -185,7 +194,7 @@ export function parseBlockConfig(rawElement) {
         moreText: getVal("moreText", "moreText", ""),
         stageID, firstInstance, postsPerBlock, mBlockID: sanitizedMBlockID, dateFormatter, dateStyle,
         paletteName: colorPalette, mBloxTheme,
-        interactionClasses: `transition-all duration-300 ease-m3-emphasized ${bloxType === 'p' || bloxType === 'q' ? '' : `${palette.hoverBg} ${palette.hoverText}`} hover:opacity-100 overflow-hidden font-bold`,
+        controlUI, wrapperUI, chipUI,
         containsNavigation: false, actualColumnCount: 0,
         overlayItems,
     };

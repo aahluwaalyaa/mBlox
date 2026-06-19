@@ -13,10 +13,10 @@ export function render(post, postID, config) {
             </div>
         `;
 
-        const blockClasses = `${config.cornerStyle} ${config.palette.containerBg} ${config.palette.containerText} flex flex-row p-4 w-full items-start ${config.interactionClasses}`;
+        const blockClasses = `${config.cornerStyle} flex flex-row p-4 w-full h-full items-start ${config.wrapperUI}`;
 
         return `
-            <article class="col-span-1 inline-flex w-full relative" role="article">
+            <article class="col-span-1 inline-flex w-full relative h-full" role="article">
                 <div class="${blockClasses}">
                     ${parts.finalImageCode}
                     ${textContentHTML}

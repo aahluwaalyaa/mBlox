@@ -66,30 +66,24 @@ export const RESPONSIVE_GRID_CLASSES_M3E = {
 };
 
 export const M3E_PALETTES = {
-    'surface': {
-        bg: 'bg-surface', text: 'text-on-surface', glass: 'bg-surface/20',
-        hoverBg: 'hover:bg-tertiary', hoverText: 'hover:text-on-tertiary',
-        containerBg: 'bg-surface-container', containerText: 'text-on-surface', containerGlass: 'bg-surface-container/20'
-    },
     'primary': {
-        bg: 'bg-primary', text: 'text-on-primary', glass: 'bg-primary/20',
-        hoverBg: 'hover:bg-tertiary', hoverText: 'hover:text-on-tertiary',
-        containerBg: 'bg-primary-container', containerText: 'text-on-primary-container', containerGlass: 'bg-primary-container/20'
+        containerBg: 'bg-surface', containerText: 'text-on-surface',
+        containerHoverBg: 'hover:bg-primary-container',
+        containerHoverText: 'hover:text-on-primary-container',
+        bg: 'bg-primary', text: 'text-on-primary',
+        hoverBg: 'hover:bg-tertiary', hoverText: 'hover:text-on-tertiary'
     },
     'secondary': {
-        bg: 'bg-secondary', text: 'text-on-secondary', glass: 'bg-secondary/20',
-        hoverBg: 'hover:bg-secondary', hoverText: 'hover:text-on-secondary',
-        containerBg: 'bg-secondary-container', containerText: 'text-on-secondary-container', containerGlass: 'bg-secondary-container/20'
+        bg: 'bg-secondary', text: 'text-on-secondary',
+        hoverBg: 'hover:bg-secondary-container', hoverText: 'hover:text-on-secondary-container',
+        containerHoverBg: 'hover:bg-secondary', containerHoverText: 'hover:text-on-secondary',
+        containerBg: 'bg-secondary-container', containerText: 'text-on-secondary-container'
     },
     'tertiary': {
-        bg: 'bg-tertiary', text: 'text-on-tertiary', glass: 'bg-tertiary/20',
-        hoverBg: 'hover:bg-tertiary-container', hoverText: 'hover:text-on-tertiary-container',
-        containerBg: 'bg-tertiary-container', containerText: 'text-on-tertiary-container', containerGlass: 'bg-tertiary-container/20'
-    },
-    'error': {
-        bg: 'bg-error', text: 'text-on-error', glass: 'bg-error/20',
-        hoverBg: 'hover:bg-error-container', hoverText: 'hover:text-on-error-container',
-        containerBg: 'bg-error-container', containerText: 'text-on-error-container', containerGlass: 'bg-error-container/20'
+        bg: 'bg-tertiary', text: 'text-on-tertiary',
+        hoverBg: 'hover:bg-primary', hoverText: 'hover:text-on-primary',
+        containerHoverBg: 'hover:bg-tertiary', containerHoverText: 'hover:text-on-tertiary',
+        containerBg: 'bg-tertiary-container', containerText: 'text-on-tertiary-container'
     }
 };
 

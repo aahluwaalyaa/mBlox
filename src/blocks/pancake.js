@@ -3,10 +3,8 @@ import { buildCard } from '../utils/card-builder.js';
 
 export function render(post, postID, config) {
     return buildCard(BLOCK_PANCAKE, post, postID, config, (parts, config) => {
-        const bgThemeClass = (config.mBloxTheme !== "surface") ? ` h-full bg-opacity-90 ${config.palette.containerBg}` : ``;
-
         const textContentHTML = parts.hasText ? `
-            <div class="p-2 @xs:p-4 @sm:p-6 flex-grow flex flex-col${bgThemeClass} text-${config.textHAlign}">
+            <div class="p-2 @xs:p-4 @sm:p-6 flex-grow flex flex-col text-${config.textHAlign}">
                 ${parts.authorCode}
                 ${parts.labelsCode}
                 ${parts.titleCode}
@@ -15,7 +13,7 @@ export function render(post, postID, config) {
             </div>
         ` : '';
 
-        return `<article class="@container col-span-1 inline-flex w-full relative" role="article"><div class="flex flex-col w-full ${config.palette.containerBg} ${config.palette.containerText} h-full ${config.cornerStyle} ${config.interactionClasses}">${parts.finalImageCode}${textContentHTML}</div></article>`;
+        return `<article class="@container col-span-1 inline-flex w-full relative h-full" role="article"><div class="flex flex-col w-full h-full overflow-hidden ${config.cornerStyle} ${config.wrapperUI}">${parts.finalImageCode}${textContentHTML}</div></article>`;
     });
 }
 
