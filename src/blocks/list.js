@@ -13,7 +13,7 @@ export function render(post, postID, config) {
                 textContentHTML = `
                     <div class="absolute inset-0 flex flex-col p-0 pointer-events-none ${{ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign] || ''
                     }">
-                        <div class="pointer-events-auto ${(config.textVerticalAlign === 'overlay' || !({ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign])) ? 'h-full ' : ''}${parts.hasTextContent ? `${config.wrapperUI} backdrop-blur-xl ` : ''}rounded-none ${paddingClass} text-${config.textHAlign}">
+                        <div class="pointer-events-auto flex flex-col min-w-0 w-full overflow-hidden ${(config.textVerticalAlign === 'overlay' || !({ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign])) ? 'h-full ' : ''}${parts.hasTextContent ? `${config.wrapperUI} backdrop-blur-xl ` : ''}rounded-none ${paddingClass} text-${config.textHAlign}">
                             ${parts.authorCode}
                             ${parts.labelsCode}
                             ${parts.titleCode}
@@ -24,7 +24,7 @@ export function render(post, postID, config) {
                 `;
             } else {
                 textContentHTML = `
-                    <div class=" ${paddingClass} w-full text-${config.textHAlign}">
+                    <div class=" ${paddingClass} flex flex-col min-w-0 overflow-hidden w-full text-${config.textHAlign}">
                         ${parts.authorCode}
                         ${parts.labelsCode}
                         ${parts.titleCode}
@@ -38,11 +38,13 @@ export function render(post, postID, config) {
         const interactionClass = config.wrapperUI;
         const bgClasses = (!config.showImage) ? [] : [];
         const displayClass = (config.showImage) ? 'block' : 'flex flex-col justify-center';
-        const blockClasses = ['relative', displayClass, config.cornerStyle, config.aspectRatio.trim(), 'w-full', 'h-full', interactionClass].filter(Boolean).join(' ');
-        const articleClasses = `@container col-span-1 inline-flex w-full h-full relative ${config.layout.mb}`;
+        const blockClasses = ['relative', displayClass, config.aspectRatio.trim(), 'w-full', 'h-full', interactionClass].filter(Boolean).join(' ');
+        const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
+        const articleClasses = `@container col-span-1 flex min-w-0 w-full h-full relative ${config.cornerStyle} ${overflowClass}`;
 
         const featuredBadgeHTML = (postID === 0) ? `<div class="absolute top-0 left-0 z-20 pointer-events-none backdrop-blur-xl ${config.wrapperUI} px-6 py-3 text-label-lg font-bold w-full">Featured</div>` : '';
 
-        return `<article class="${articleClasses}" role="article"><div class="${blockClasses}">${parts.finalImageCode}${featuredBadgeHTML}${textContentHTML}</div></article>`;
+        return `<article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Article"><div class="${blockClasses}">${parts.finalImageCode}${featuredBadgeHTML}${textContentHTML}</div></article>`;
     });
 }
+

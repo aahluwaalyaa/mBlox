@@ -62,6 +62,7 @@ export async function mBlocks(blockItem) {
 
                 if (blockConfig.firstInstance) {
                     rawElement.setAttribute("data-s", blockConfig.stageID);
+                    rawElement.className += ` flex flex-col ${blockConfig.layout}`;
                     rawElement.insertAdjacentHTML('beforeend', renderer.createBlockHeader(blockConfig));
                 }
 

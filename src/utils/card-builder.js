@@ -42,7 +42,7 @@ export function buildCard(finalType, post, postID, config, layoutStrategy) {
     // 3. Resolve final fallback image logic (when no header or CTA is present)
     let finalImageCode = config.showImage ? imageCode : '';
     if (!config.showHeader && !config.callToAction && config.showImage && !config.showLabels) {
-        finalImageCode = `<a href="${post.url}" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${imageCode}`;
+        finalImageCode = `<a href="${post.url}" itemprop="url" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${imageCode}`;
     }
 
     const ctaRowCode = (finalType !== 'comment' && (dateCode || ctaButtonCode)) ? `<div class="flex items-center justify-between mt-auto w-full pt-4">${dateCode}${ctaButtonCode}</div>` : ctaButtonCode;

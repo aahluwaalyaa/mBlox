@@ -202,7 +202,7 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | `data-theme` | `theme` | Force theme: `light`, `dark`, or `auto`. | `auto` |
 | `data-s` | `s` | Stage ID for coordinating multiple blocks. | `1` |
 | `data-posts` | `posts` | Number of posts to fetch/display. | `3` |
-| `data-palette` | `palette` | Color palette (e.g., `surface`). | `surface` |
+| `data-palette` | `palette` | Color palette (e.g., `secondary`). | `primary` |
 | `data-textVAlign` | `textVAlign` | Vertical alignment of text (`top`, `middle`, `bottom`, `overlay`). | Varies |
 | `data-textHAlign` | `textHAlign` | Horizontal alignment of text (`left`, `center`, `right`). | Varies |
 | `data-iBlur` | `iBlur` | Blur the background image (`true` or `false`). | Varies |
@@ -215,6 +215,9 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | `data-space` | `space` | Gap between grid items. | Varies |
 | `data-corner` | `corner` | Corner style (`sharp` removes rounded corners). | *(rounded)* |
 | `data-ar` | `ar` | Aspect ratio of images (e.g., `16x9`, `4x3`, `1x1`). | `1/1` |
+| `data-size` | `size` | Typography size scale for Title, Snippet, CTA (`sm`, `md`, `lg`). | `md` |
+| `data-chipSize`| `chipSize`| Size scale for Date and Label chips (`sm`, `md`, `lg`). | `md` |
+| `data-filter` | `filter` | Tailwind CSS filter class applied to images (e.g. `grayscale`, `sepia`). | *(none)* |
 | `data-iBorder` | `iBorder` | Enables rounded borders on images (`true` or `false`). | `false` |
 | `data-snippetLines`| `snippetLines` | Maximum number of lines for post snippet. | `3` |
 | `data-CTAText` | `CTAText` | Custom call-to-action button text. | *(empty)* |

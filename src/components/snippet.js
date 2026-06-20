@@ -9,11 +9,12 @@ export function renderSnippet(finalType, config, postContent, postUrl) {
     if (!snippetText) return '';
 
     const isOnlyElement = !config.showHeader && !config.showImage && !config.callToAction && !config.showLabels && !config.showDate;
-    const clampClass = `line-clamp-${config.snippetLines || 3}`;
+    const clampClass = `line-clamp-${config.snippetLines || 2}`;
+    const size = config.size || 'md';
 
     if (isOnlyElement) {
-        return `<a href="${postUrl}" class="after:absolute after:inset-0 z-10 block ${clampClass} list-none text-body-md font-normal opacity-50 ${(finalType === BLOCK_COVER) ? 'py-6 mx-0 md:mx-10' : ''}" aria-label="Read more">${snippetText}</a>`;
+        return `<a href="${postUrl}" itemprop="description" class="after:absolute after:inset-0 z-10 block ${clampClass} w-full list-none text-body-${size} opacity-50 ${(finalType === BLOCK_COVER) ? 'py-6 px-0 md:px-10' : ''}" aria-label="Read more">${snippetText}</a>`;
     }
 
-    return `<div class="${clampClass} list-none text-body-md font-normal opacity-50 ${(finalType === BLOCK_COVER) ? 'py-6 block mx-0 md:mx-10' : ''}">${snippetText}</div>`;
+    return `<div itemprop="description" class="${clampClass} w-full list-none text-body-${size} opacity-50 ${(finalType === BLOCK_COVER) ? 'py-6 px-0 md:px-10' : ''}">${snippetText}</div>`;
 }

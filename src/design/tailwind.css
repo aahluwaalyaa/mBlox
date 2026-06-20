@@ -3,7 +3,7 @@
 /* Tell Tailwind v4 where to scan for classes */
 @source "../**/*.js";
 @source "../../demo/**/*.html";
-@source inline("line-clamp-1 line-clamp-2 line-clamp-3 line-clamp-4 line-clamp-5 line-clamp-6");
+@source inline("line-clamp-1 line-clamp-2 line-clamp-3 line-clamp-4 line-clamp-5 line-clamp-6 text-headline-lg text-headline-md text-headline-sm text-title-lg text-title-md text-title-sm text-body-lg text-body-md text-body-sm text-label-lg text-label-md text-label-sm");
 
 @theme {
   /* ─── M3E BREAKPOINTS ────────────────────────────────────────────────────────
@@ -59,13 +59,6 @@
   --font-serif: var(--font-secondary);
 
   /* ─── MATERIAL DESIGN 3 TYPE SCALE ───────────────────────────────────────────*/
-  --text-display-lg: clamp(2.5rem, 5vw, 3.57rem);
-  --text-display-lg--line-height: clamp(3rem, 5.5vw, 4rem);
-  --text-display-md: clamp(2rem, 4vw, 2.85rem);
-  --text-display-md--line-height: clamp(2.5rem, 4.5vw, 3.25rem);
-  --text-display-sm: clamp(1.75rem, 3.5vw, 2.28rem);
-  --text-display-sm--line-height: clamp(2.25rem, 4vw, 2.75rem);
-
   --text-headline-lg: clamp(1.5rem, 3vw, 2rem);
   --text-headline-lg--line-height: clamp(2rem, 3.5vw, 2.5rem);
   --text-headline-md: clamp(1.25rem, 2.5vw, 1.71rem);

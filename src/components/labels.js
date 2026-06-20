@@ -1,8 +1,8 @@
 export function renderLabels(config, labels, siteUrl) {
     if (!config.showLabels || !labels || labels.length === 0) return '';
 
-    // Select up to 2 random labels
-    const displayLabels = [...labels].sort(() => 0.5 - Math.random()).slice(0, 2);
+    // Select up to 3 random labels
+    const displayLabels = [...labels].sort(() => 0.5 - Math.random()).slice(0, 3);
 
     // Build base URL for searches
     // We use a relative or absolute path based on siteUrl or default to /search/label/
@@ -35,15 +35,17 @@ export function renderLabels(config, labels, siteUrl) {
         }
     }
 
+    const chipSize = config.chipSize;
+    const heightClass = { sm: 'h-5', md: 'h-6', lg: 'h-8' }[chipSize] || 'h-6';
     const labelsHTML = displayLabels.map(label => {
         const encodedLabel = encodeURIComponent(label);
         const displayString = label.startsWith('#') ? label.replace(/\s+/g, '') : `#${label.replace(/\s+/g, '')}`;
-        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full cursor-pointer ${config.chipUI} opacity-50 hover:opacity-100 h-6 px-3 text-label-md" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
+        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="shrink-0 relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full cursor-pointer ${config.chipUI} ${heightClass} px-3 text-label-${chipSize}" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
     }).join('');
 
     return `
-    <div class="flex items-center gap-2 mb-3 relative z-50 pointer-events-auto">
-        <div class="flex flex-wrap items-center gap-2">
+    <div class="flex items-center gap-2 mb-3 relative z-50 pointer-events-auto max-w-full overflow-hidden">
+        <div class="flex flex-wrap items-center gap-2 overflow-hidden max-w-full ${heightClass}">
             ${labelsHTML}
         </div>
     </div>`;

@@ -26,19 +26,19 @@ export function renderImage(finalType, postID, config, data) {
     const IMAGE_CONFIG_MAP = {
         [BLOCK_SHOWCASE]: { bs: [config.aspectRatio.trim()], figure: 'w-full h-full flex' },
         [BLOCK_PANCAKE]: { bs: [config.aspectRatio.trim()], figure: 'w-full h-full flex' },
-        [BLOCK_COMMENT]: { 
-            style: 'object-fit:cover !important;height:3rem!important;width:3rem!important;', 
-            bs: ['rounded-full', 'm-2'], 
-            figure: 'shrink-0 flex items-center justify-center' 
+        [BLOCK_COMMENT]: {
+            style: 'object-fit:cover !important;height:3rem!important;width:3rem!important;',
+            bs: ['rounded-full', 'm-2'],
+            figure: 'shrink-0 flex items-center justify-center'
         },
-        [BLOCK_QUOTE]: { 
-            style: 'object-fit:cover !important;height:6rem!important;width:6rem;', 
-            bs: ['rounded-full', 'mx-auto', 'mt-6'], 
-            figure: 'w-full h-full flex' 
+        [BLOCK_QUOTE]: {
+            style: 'object-fit:cover !important;height:6rem!important;width:6rem;',
+            bs: ['rounded-full', 'mx-auto', 'mt-6'],
+            figure: 'w-full h-full flex'
         },
-        [BLOCK_STACK]: { 
-            bs: ['h-full', 'object-cover'], 
-            figure: 'w-1/3 shrink-0 h-full flex items-center justify-center' 
+        [BLOCK_STACK]: {
+            bs: ['h-full', 'object-cover'],
+            figure: 'w-1/3 shrink-0 h-full flex items-center justify-center'
         },
         [BLOCK_COVER]: { bs: ['w-full', 'h-full', 'object-cover'], figure: 'w-full h-full flex' },
         [BLOCK_LIST]: { bs: [config.aspectRatio.trim()], figure: 'w-full h-full flex' },
@@ -47,25 +47,28 @@ export function renderImage(finalType, postID, config, data) {
     };
 
     const imgConf = IMAGE_CONFIG_MAP[finalType] || { bs: [], figure: 'w-full h-full flex' };
-    
+
     let imageCoverStyle = imgConf.style || "object-fit:cover !important;height:100% !important;";
     const imageBSClasses = imgConf.bs.length > 0 ? [...imgConf.bs] : ['w-full', 'h-auto'];
     if (finalType !== BLOCK_COMMENT && finalType !== BLOCK_QUOTE && finalType !== BLOCK_STACK && finalType !== BLOCK_COVER) {
         imageBSClasses.unshift('w-full', 'h-auto');
     }
     let figureClass = imgConf.figure;
-    
+
     let tooltipAttributes = ``;
     let showcaseImageCode = '';
+
+    const overlayCode = post ? renderImageOverlay(post, config) : '';
 
     if (finalType === BLOCK_SHOWCASE) {
         tooltipAttributes = `data-toggle="tooltip" data-vidid="${videoID}"`;
         const showcaseYoutubeIcon = getShowcaseVideoIcon(videoID);
         const corner = config.cornerStyle === " rounded" ? ' rounded-t-3xl' : config.cornerStyle;
-        if (postID === 0) showcaseImageCode = `<figure class="m-0 ${imageBSClasses.join(' ')} ${config.aspectRatio} ${corner} m-blox-image-to-load relative cursor-pointer" data-img-high="${highResImageURL}" data-is-fixed="true" style="${config.articleHeight}" role="img" loading="lazy" title="${postTitle}" aria-label="${postTitle} image" ${tooltipAttributes}>${showcaseYoutubeIcon}</figure>`;
+        if (postID === 0) showcaseImageCode = `<figure itemprop="image" class="${imageBSClasses.join(' ')} ${config.aspectRatio} ${corner} m-blox-image-to-load relative cursor-pointer" data-img-high="${highResImageURL}" data-is-fixed="true" style="${config.articleHeight}" role="img" loading="lazy" title="${postTitle}" aria-label="${postTitle}" ${tooltipAttributes}>${overlayCode}${showcaseYoutubeIcon}</figure>`;
     }
 
     if (config.blurImage && config.contentType !== "comments") imageBSClasses.push('blur-sm');
+    if (config.imageFilter) imageBSClasses.push(config.imageFilter);
 
     const placeholderSrc = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
     const isComplexBlock = config.blockType === BLOCK_SHOWCASE || config.blockType === BLOCK_LIST;
@@ -75,13 +78,12 @@ export function renderImage(finalType, postID, config, data) {
     const youtubeIcon = getVideoIcon(videoID);
 
     const imgTagClasses = `w-full ${imageBSClasses.join(' ')} ${lazyLoadClass}`.replace(/\s+/g, ' ');
-    const fixedFigureClass = `m-0 relative ${figureClass} ${imageBSClasses.join(' ')} ${lazyLoadClass}`.replace(/\s+/g, ' ');
+    const fixedFigureClass = `relative ${figureClass} ${imageBSClasses.join(' ')} ${lazyLoadClass}`.replace(/\s+/g, ' ');
 
-    const overlayCode = post ? renderImageOverlay(post, config) : '';
 
     const imageCode = canBeFixed
-        ? `<figure class="${fixedFigureClass} group" data-img-high="${highResImageURL}" data-is-fixed="true" style="${config.articleHeight}" role="img" loading="lazy" aria-label="${postTitle} image"${tooltipAttributes}>${overlayCode}${youtubeIcon}</figure>`
-        : `<figure class="m-0 relative ${figureClass} group"><img class="${imgTagClasses}" style="${imageCoverStyle}" src="${imageSrc}" data-img-high="${highResImageURL}" alt="${postTitle} image" loading="lazy" title="${postTitle}" ${tooltipAttributes}/>${overlayCode}${youtubeIcon}</figure>`;
+        ? `<figure itemprop="image" class="${fixedFigureClass} group" data-img-high="${highResImageURL}" data-is-fixed="true" style="${config.articleHeight}" role="img" loading="lazy" aria-label="${postTitle}"${tooltipAttributes}>${overlayCode}${youtubeIcon}</figure>`
+        : `<figure itemprop="image" class="relative ${figureClass} group"><img class="${imgTagClasses}" style="${imageCoverStyle}" src="${imageSrc}" data-img-high="${highResImageURL}" alt="${postTitle}" loading="lazy" title="${postTitle}" ${tooltipAttributes}/>${overlayCode}${youtubeIcon}</figure>`;
 
     return { imageCode, showcaseImageCode, videoThumbnailURL, highResImageURL };
 }

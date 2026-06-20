@@ -14,8 +14,10 @@ export function render(post, postID, config) {
     });
 
     // Link wrapper classes
-    const linkClasses = ['block', 'relative', 'w-full', config.cornerStyle, config.aspectRatio.trim()].filter(Boolean).join(' ');
+    const linkClasses = ['block', 'relative', 'w-full', config.aspectRatio.trim()].filter(Boolean).join(' ');
 
-    const articleClasses = '@container col-span-1 inline-flex w-full h-full';
-    return `<article class="${articleClasses}" role="article"><div class="${linkClasses}"><a href="${post.url}" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${config.showImage ? imageCode : ''}</div></article>`;
+    const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
+        const articleClasses = `@container col-span-1 flex min-w-0 w-full h-full ${config.cornerStyle} ${overflowClass}`;
+    return `<article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Article"><div class="${linkClasses}"><a href="${post.url}" itemprop="url" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${config.showImage ? imageCode : ''}</div></article>`;
 }
+

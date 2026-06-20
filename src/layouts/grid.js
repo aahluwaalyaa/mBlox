@@ -5,5 +5,5 @@ export function renderGrid(renderedBlocks, config) {
 
     const gridColsClass = RESPONSIVE_GRID_CLASSES_M3E[config.columnCount] || RESPONSIVE_GRID_CLASSES_M3E[6];
     
-    return `<div class="${config.layout.gap} grid ${gridColsClass}">${renderedBlocks.join('')}</div>`;
+    return `<div class="${config.layout} grid ${gridColsClass}">${renderedBlocks.join('')}</div>`;
 }

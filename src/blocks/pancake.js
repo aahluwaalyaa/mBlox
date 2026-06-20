@@ -13,7 +13,10 @@ export function render(post, postID, config) {
             </div>
         ` : '';
 
-        return `<article class="@container col-span-1 inline-flex w-full relative h-full" role="article"><div class="flex flex-col w-full h-full overflow-hidden ${config.cornerStyle} ${config.wrapperUI}">${parts.finalImageCode}${textContentHTML}</div></article>`;
+        const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
+        const articleClasses = `@container col-span-1 flex min-w-0 w-full relative h-full ${config.cornerStyle} ${overflowClass}`;
+        return `<article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Article"><div class="flex flex-col w-full h-full overflow-hidden ${config.wrapperUI}">${parts.finalImageCode}${textContentHTML}</div></article>`;
     });
 }
+
 

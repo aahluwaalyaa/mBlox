@@ -1,8 +1,8 @@
 export function renderImageOverlay(post, config) {
-    if (!config.showOverlay && !config.imgVignette) return '';
+    if (!config.showOverlay && !config.overlayItems.includes('g')) return '';
 
     let vignetteHTML = '';
-    if (config.imgVignette) {
+    if (config.overlayItems.includes('g')) {
         vignetteHTML = `<div class="absolute inset-0 pointer-events-none z-10" style="background: radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.6) 120%);"></div>`;
     }
 
@@ -11,7 +11,7 @@ export function renderImageOverlay(post, config) {
     let viewsHTML = '';
     if (config.overlayItems.includes('v') && post.viewCount && post.viewCount > 0) {
         viewsHTML = `
-        <div class="flex items-center gap-1 px-2 h-6 rounded-md backdrop-blur-md ${config.chipUI}">
+        <div class="flex items-center gap-1 px-2 h-6 rounded-md ${config.chipUI}">
             <svg aria-hidden="true" class="w-4 h-4"><use href="#icon-eye"></use></svg>
             <span class="text-[0.625rem]">${post.viewCount}</span>
         </div>`;
@@ -22,7 +22,7 @@ export function renderImageOverlay(post, config) {
         const commentsUrl = post.commentsUrl || post.url;
         const commentCountText = (post.commentCount && post.commentCount > 0) ? `<span class="text-[0.625rem]">${post.commentCount}</span>` : '';
         commentsHTML = `
-        <a aria-label="Comments" class="relative px-2 h-6 rounded-md backdrop-blur-md flex items-center justify-center gap-1 ${config.chipUI} pointer-events-auto" href="${commentsUrl}">
+        <a aria-label="Comments" class="relative px-2 h-6 rounded-md flex items-center justify-center gap-1 ${config.chipUI} pointer-events-auto" href="${commentsUrl}">
             <svg aria-hidden="true" class="w-4 h-4"><use href="#icon-comment-bubble"></use></svg>
             ${commentCountText}
         </a>`;
@@ -31,7 +31,7 @@ export function renderImageOverlay(post, config) {
     let bookmarkHTML = '';
     if (config.overlayItems.includes('b')) {
         bookmarkHTML = `
-        <button aria-label="Save" class="group bm-button relative h-6 rounded-md backdrop-blur-md flex items-center justify-center ${config.chipUI} pointer-events-auto" data-bm-title="${post.title.replace(/"/g, '&quot;')}" data-bm-url="${post.url}" data-bm-image="${post.thumbnailUrl || ''}" type="button">
+        <button aria-label="Save" class="group bm-button relative h-6 rounded-md flex items-center justify-center ${config.chipUI} pointer-events-auto" data-bm-title="${post.title.replace(/"/g, '&quot;')}" data-bm-url="${post.url}" data-bm-image="${post.thumbnailUrl || ''}" type="button">
             <span class="bm-text overflow-hidden whitespace-nowrap text-[11px] font-medium transition-all duration-300 max-w-0 opacity-0 group-hover:max-w-[60px] group-hover:opacity-100 group-hover:pl-2.5">Save</span>
             <div class="w-6 h-6 flex items-center justify-center shrink-0">
                 <svg aria-hidden="true" class="w-4 h-4 bm-add-icon group-[.added]:hidden"><use href="#icon-bookmark-add"></use></svg>
@@ -57,12 +57,12 @@ export function renderImageOverlay(post, config) {
 
         if (post.authorUri) {
             authorHTML = `
-            <a href="${post.authorUri}" class="flex items-center gap-1 px-2 h-6 rounded-md backdrop-blur-md text-[0.625rem] ${config.chipUI} pointer-events-auto">
+            <a href="${post.authorUri}" class="flex items-center gap-1 px-2 h-6 rounded-md text-label-md ${config.chipUI} pointer-events-auto">
                 ${authorInner}
             </a>`;
         } else {
             authorHTML = `
-            <div class="flex items-center gap-1 px-2 h-6 rounded-md backdrop-blur-md text-[0.625rem] ${config.chipUI} pointer-events-auto">
+            <div class="flex items-center gap-1 px-2 h-6 rounded-md text-[0.625rem] ${config.chipUI} pointer-events-auto">
                 ${authorInner}
             </div>`;
         }
@@ -71,7 +71,7 @@ export function renderImageOverlay(post, config) {
     let shareHTML = '';
     if (config.overlayItems.includes('s')) {
         shareHTML = `
-        <button aria-label="Share" class="w-6 h-6 rounded-md backdrop-blur-md flex items-center justify-center ${config.chipUI} pointer-events-auto" data-action="share-native" data-title="${post.title.replace(/"/g, '&quot;')}" data-url="${post.url}">
+        <button aria-label="Share" class="w-6 h-6 rounded-md flex items-center justify-center ${config.chipUI} pointer-events-auto" data-action="share-native" data-title="${post.title.replace(/"/g, '&quot;')}" data-url="${post.url}">
             <svg aria-hidden="true" class="w-4 h-4"><use href="#icon-share"></use></svg>
         </button>`;
     }

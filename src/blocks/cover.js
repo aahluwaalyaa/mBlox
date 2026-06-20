@@ -37,11 +37,13 @@ export function render(post, postID, config) {
             overlay: `w-full h-full inset-0 rounded-none`
         }[config.textVerticalAlign] || `w-3/4 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 ${(config.cornerStyle === " rounded-none" || config.textVerticalAlign === "overlay") ? ' rounded-none' : ' rounded-3xl'}`
         }">
-            ${authorCode}
-            <div class="flex flex-wrap items-center justify-center gap-2">${dateCode ? `<div class="mb-3">${dateCode}</div>` : ''}${labelsCode}</div>
-            ${titleCode}
-            ${snippetCode}
-            ${ctaButtonCode}
+            <div class="w-full flex flex-col items-center ${config.textVerticalAlign === 'overlay' ? 'max-w-[75%]' : ''}">
+                ${authorCode}
+                <div class="flex flex-wrap items-center justify-center gap-4">${dateCode ? `<div class="mb-3 shrink-0">${dateCode}</div>` : ''}${labelsCode ? `<div class="min-w-0 max-w-full">${labelsCode}</div>` : ''}</div>
+                ${titleCode}
+                ${snippetCode}
+                ${ctaButtonCode}
+            </div>
         </div>
     ` : '';
 
@@ -49,12 +51,14 @@ export function render(post, postID, config) {
     const blockClasses = ['relative', 'block', 'w-full', 'rounded-none', 'text-' + config.textHAlign, 'h-full', config.wrapperUI].filter(Boolean).join(' ');
 
     const articleStyle = config.articleHeight ? ` style="${config.articleHeight.replace(';', '')}"` : '';
-    const articleClasses = '@container col-span-1 inline-flex w-full relative h-full';
+    const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
+    const articleClasses = `@container col-span-1 flex min-w-0 w-full relative h-full ${config.cornerStyle} ${overflowClass}`;
 
     let finalImageCode = config.showImage ? imageCode : '';
     if (!config.showHeader && !config.callToAction) {
-        finalImageCode = `<a href="${post.url}" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${imageCode}`;
+        finalImageCode = `<a href="${post.url}" itemprop="url" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${imageCode}`;
     }
 
-    return `<article class="${articleClasses}"${articleStyle} role="article"><div class="${blockClasses}">${finalImageCode}${textContentHTML}</div></article>`;
+    return `<article class="${articleClasses}"${articleStyle} role="article" itemscope itemtype="https://schema.org/Article"><div class="${blockClasses}">${finalImageCode}${textContentHTML}</div></article>`;
 }
+

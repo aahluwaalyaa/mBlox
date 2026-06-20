@@ -24,8 +24,8 @@ export function renderListGrid(renderedBlocks, config) {
         const innerGridColsClass = RESPONSIVE_GRID_CLASSES_M3E[currentColumnCount] || RESPONSIVE_GRID_CLASSES_M3E[6];
         const innerSpanClass = SUBGRID_SPAN_CLASSES_M3E[config.columnCount] || 'col-span-1';
 
-        innerGridHTML = `<div class="${config.layout.gap} ${innerSpanClass} px-0 grid ${innerGridColsClass}">${renderedBlocks.slice(1).join('')}</div>`;
+        innerGridHTML = `<div class="${config.layout} ${innerSpanClass} px-0 grid ${innerGridColsClass}">${renderedBlocks.slice(1).join('')}</div>`;
     }
 
-    return `<div class="${config.layout.gap} col flex-grow-1 grid ${outerGridColsClass}">${renderedBlocks[0]}${innerGridHTML}</div>`;
+    return `<div class="${config.layout} col flex-grow-1 grid ${outerGridColsClass}">${renderedBlocks[0]}${innerGridHTML}</div>`;
 }

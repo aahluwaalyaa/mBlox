@@ -13,10 +13,13 @@ export function render(post, postID, config) {
             </div>
         `;
 
-        const blockClasses = `${config.cornerStyle} flex flex-row p-4 w-full h-full items-start ${config.wrapperUI}`;
+        const blockClasses = ` flex flex-row p-4 w-full h-full items-start ${config.wrapperUI}`;
+
+        const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
+        const articleClasses = `col-span-1 flex min-w-0 w-full relative h-full ${config.cornerStyle} ${overflowClass}`;
 
         return `
-            <article class="col-span-1 inline-flex w-full relative h-full" role="article">
+            <article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Comment">
                 <div class="${blockClasses}">
                     ${parts.finalImageCode}
                     ${textContentHTML}
@@ -25,3 +28,4 @@ export function render(post, postID, config) {
         `;
     });
 }
+

@@ -6,26 +6,28 @@ export function renderDate(finalType, config, publishedDate, updatedDate) {
     const pDate = new Date(publishedDate);
     const formattedDate = config.dateFormatter.format(pDate);
 
+    const isoDate = pDate.toISOString();
+
     // For comment blocks, leave the frontend as is (long format, original layout)
     if (finalType === BLOCK_COMMENT) {
-        return `<span class="text-label-md font-light">${config.showAuthor ? ' &#8226; ' : ''} ${formattedDate}</span>`;
+        return `<time datetime="${isoDate}" itemprop="datePublished" class="text-label-${config.chipSize}">${config.showAuthor ? ' &#8226; ' : ''} ${formattedDate}</time>`;
     }
 
     // New format for all other blocks
     let isUpdated = false;
+    let finalIsoDate = isoDate;
     if (updatedDate) {
         const uDate = new Date(updatedDate);
         // Check if updated date is at least 24 hours after published date
         if (uDate.getTime() - pDate.getTime() > 24 * 60 * 60 * 1000) {
             isUpdated = true;
+            finalIsoDate = uDate.toISOString();
         }
     }
 
-    if (isUpdated) {
-        const bgClass = config.palette.bg || 'bg-surface';
-        const textClass = config.palette.text || 'text-on-surface';
-        return `<div class="flex items-center gap-2"><span class="${bgClass} ${textClass} px-2 py-0.5 rounded-sm text-label-sm font-bold uppercase tracking-wider">Updated</span><span class="text-label-md font-light">${formattedDate}</span></div>`;
-    } else {
-        return `<span class="text-label-md font-light">Posted ${formattedDate}</span>`;
-    }
+    const prefix = isUpdated ? 'Updated' : 'Posted';
+    const prefixClass = isUpdated ? `${config.palette.bg} ${config.palette.text}` : '';
+    const propName = isUpdated ? 'dateModified' : 'datePublished';
+
+    return `<div class="flex items-center gap-1 text-label-${config.chipSize}"><span class="${prefixClass} px-2 py-1 rounded-full">${prefix}</span><time datetime="${finalIsoDate}" itemprop="${propName}" class="opacity-50">${formattedDate}</time></div>`;
 }

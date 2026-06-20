@@ -19,7 +19,12 @@ export function renderCTA(finalType, config, postTitle, postUrl) {
     }
 
     const isSharp = config.cornerStyle === " rounded-none";
-    const baseClasses = `js-cta-link inline-block text-label-lg px-4 py-2 ${config.controlUI} ${isSharp ? 'rounded-none' : 'rounded-full'}`;
+    const size = config.size || 'md';
+    let paddingClasses = 'px-2 py-1';
+    if (size === 'sm') paddingClasses = 'px-1';
+    else if (size === 'lg') paddingClasses = 'px-4 py-2';
+    
+    const baseClasses = `js-cta-link inline-block text-label-${size} ${paddingClasses} ${config.controlUI} ${isSharp ? 'rounded-none' : 'rounded-full'}`;
 
     return `<a href="${postUrl}" class="${baseClasses} ${specificClasses} after:absolute after:inset-0 z-10" aria-label="View ${postTitle.replace(/"/g, '&quot;')}">${config.callToAction}</a>`;
 }

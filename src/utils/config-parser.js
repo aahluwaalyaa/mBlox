@@ -72,20 +72,28 @@ export function parseBlockConfig(rawElement) {
         }
     }
 
+    let lowerJsonConfig = {};
+    for (const key in jsonConfig) {
+        if (jsonConfig.hasOwnProperty(key)) lowerJsonConfig[key.toLowerCase()] = jsonConfig[key];
+    }
+
     const getVal = (attrName, jsonKey, defaultValue) => {
-        if (jsonConfig[jsonKey] !== undefined) return jsonConfig[jsonKey];
+        const lowerKey = jsonKey.toLowerCase();
+        if (lowerJsonConfig[lowerKey] !== undefined) return String(lowerJsonConfig[lowerKey]);
         const attrVal = rawElement.getAttribute(`data-${attrName}`);
         return attrVal !== null ? attrVal : defaultValue;
     };
 
     const getBoolVal = (attrName, jsonKey, defaultValue) => {
-        if (jsonConfig[jsonKey] !== undefined) return !!jsonConfig[jsonKey];
+        const lowerKey = jsonKey.toLowerCase();
+        if (lowerJsonConfig[lowerKey] !== undefined) return !!lowerJsonConfig[lowerKey];
         const attrVal = rawElement.getAttribute(`data-${attrName}`);
         return attrVal !== null ? (attrVal.toLowerCase() === 'true') : defaultValue;
     };
 
     const getIntVal = (attrName, jsonKey, defaultValue) => {
-        if (jsonConfig[jsonKey] !== undefined) return parseInt(jsonConfig[jsonKey], 10);
+        const lowerKey = jsonKey.toLowerCase();
+        if (lowerJsonConfig[lowerKey] !== undefined) return parseInt(lowerJsonConfig[lowerKey], 10);
         const attrVal = rawElement.getAttribute(`data-${attrName}`);
         return attrVal !== null ? parseInt(attrVal, 10) : defaultValue;
     };
@@ -159,7 +167,8 @@ export function parseBlockConfig(rawElement) {
     const columnCountVal = getVal("cols", "cols", null);
     const blockRowsVal = getVal("rows", "rows", "1");
 
-    const overlayItemsRaw = String(getVal("overlay-items", "overlayItems", "vcasb")).toLowerCase();
+    const defaultOverlayItems = (bloxType !== 'c' && contentType !== 'comments') ? "gvcasb" : "vcasb";
+    const overlayItemsRaw = String(getVal("overlay-items", "overlayItems", defaultOverlayItems)).toLowerCase();
     const overlayItems = overlayItemsRaw.split('');
 
     const transitionClass = 'transition-all duration-300 ease-m3-emphasized';
@@ -175,6 +184,7 @@ export function parseBlockConfig(rawElement) {
         columnCount: columnCountVal !== null ? parseInt(columnCountVal, 10) : null,
         blockRows: parseInt(blockRowsVal, 10),
         isCarousel: getBoolVal("isCarousel", "isCarousel", false),
+        showNav: getBoolVal("showNav", "showNav", true),
         sectionHeight: getVal("iHeight", "iHeight", null),
         articleHeight: '',
         blurImage: imageBlur === "true" || jsonConfig.iBlur === true ? true : (imageBlur === "false" || jsonConfig.iBlur === false ? false : null),
@@ -185,9 +195,8 @@ export function parseBlockConfig(rawElement) {
         aspectRatio: ` ${ASPECT_RATIO_CLASSES[String(getVal("ar", "ar", "1/1")).replace('x', '/').toLowerCase()] || 'aspect-square'}`,
         isImageFixed: imageFixed === "true" || jsonConfig.iFix === true ? true : (imageFixed === "false" || jsonConfig.iFix === false ? false : null),
         hasRoundedBorder: getBoolVal("iBorder", "iBorder", false),
-        imgVignette: getBoolVal("imgVignette", "imgVignette", bloxType !== 'c'),
         moreLink: getVal("moreLink", "moreLink", ""),
-        snippetLines: getIntVal("snippetLines", "snippetLines", 3),
+        snippetLines: getIntVal("snippetLines", "snippetLines", 2),
         callToAction: getVal("CTAText", "CTAText", ""),
         ctaAlign: getVal("ctaAlign", "ctaAlign", ""),
         textHAlign: getVal("textHAlign", "textHAlign", ""),
@@ -197,6 +206,9 @@ export function parseBlockConfig(rawElement) {
         controlUI, wrapperUI, chipUI,
         containsNavigation: false, actualColumnCount: 0,
         overlayItems,
+        size: String(getVal("size", "size", showImage ? "md" : "lg")).toLowerCase(),
+        chipSize: String(getVal("chipSize", "chipSize", "md")).toLowerCase(),
+        imageFilter: String(getVal("filter", "filter", "")).toLowerCase(),
     };
     config.layout = LAYOUT_CLASSES[config.spaceSize * 2] || LAYOUT_CLASSES[6];
     return applyDefaultConfig(config);
