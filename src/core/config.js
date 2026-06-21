@@ -47,6 +47,8 @@ export function getBreakpointIndex(width) {
     return 4;
 }
 
+
+
 export const RESPONSIVE_CAROUSEL_CLASSES_M3E = {
     1: 'auto-cols-[100%]',
     2: 'auto-cols-[100%] @3xl:auto-cols-[50%]',
