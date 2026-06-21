@@ -10,7 +10,7 @@ export function render(post, postID, config) {
                 <span class="mt-4 text-right">
                     ${parts.authorCode}
                 </span>
-                <div class="mt-auto pt-2">${parts.ctaRowCode}</div>
+                ${parts.ctaRowCode}
             </div>
         ` : '';
 
@@ -21,5 +21,3 @@ export function render(post, postID, config) {
         return `<article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Article"><div class="${blockClasses}">${parts.finalImageCode}${textContentHTML}</div></article>`;
     });
 }
-
-

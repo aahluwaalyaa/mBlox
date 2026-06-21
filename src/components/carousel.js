@@ -8,7 +8,7 @@ export function renderCarouselIndicators(carouselIndicators, config, response) {
 
     let dotsHTML = '';
     if (numCols > 1) {
-        const dotsPositionClass = config.blockType === 'v' ? 'bottom-12' : 'bottom-3';
+        const dotsPositionClass = config.blockType === 'v' ? 'bottom-6' : 'bottom-0';
         const dots = Array.from({ length: numCols }, (_, i) =>
             `<button type="button" class="carousel-dot pointer-events-auto w-2 h-2 rounded-full bg-current ${config.palette.text} opacity-30 hover:opacity-100 transition-opacity aria-[current='true']:opacity-100" data-index="${i}" aria-label="Slide ${i + 1}"></button>`
         ).join('');
@@ -38,6 +38,27 @@ export function initCarousel(rawElement, config) {
             container.scrollBy({ left: container.clientWidth, behavior: 'smooth' });
         });
     }
+
+    const checkArrows = () => {
+        if (!container) return;
+        const isAtStart = container.scrollLeft <= 5;
+        const isAtEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 5;
+        const isNotScrollable = container.scrollWidth <= container.clientWidth;
+
+        if (prevBtn) {
+            prevBtn.style.visibility = (isAtStart || isNotScrollable) ? 'hidden' : 'visible';
+            prevBtn.style.opacity = (isAtStart || isNotScrollable) ? '0' : '1';
+        }
+        if (nextBtn) {
+            nextBtn.style.visibility = (isAtEnd || isNotScrollable) ? 'hidden' : 'visible';
+            nextBtn.style.opacity = (isAtEnd || isNotScrollable) ? '0' : '1';
+        }
+    };
+
+    container.addEventListener('scroll', checkArrows, { passive: true });
+    window.addEventListener('resize', checkArrows);
+    // Use requestAnimationFrame to ensure layout is ready before checking arrows
+    requestAnimationFrame(checkArrows);
 
     const dots = rawElement.querySelectorAll('.carousel-dot');
     if (dots.length > 0 && container) {

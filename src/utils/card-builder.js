@@ -45,7 +45,7 @@ export function buildCard(finalType, post, postID, config, layoutStrategy) {
         finalImageCode = `<a href="${post.url}" itemprop="url" class="absolute inset-0 z-10" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>${imageCode}`;
     }
 
-    const ctaRowCode = (finalType !== 'comment' && (dateCode || ctaButtonCode)) ? `<div class="flex items-center justify-between mt-auto w-full pt-4">${dateCode}${ctaButtonCode}</div>` : ctaButtonCode;
+    const ctaRowCode = (finalType !== 'comment' && (dateCode || ctaButtonCode)) ? `<div class="flex items-center justify-between mt-auto w-full pt-2">${dateCode}${ctaButtonCode}</div>` : ctaButtonCode;
 
     const parts = {
         authorCode, dateCode, titleCode, snippetCode, ctaButtonCode, ctaRowCode, imageCode, finalImageCode, labelsCode, hasText, hasTextContent

@@ -7,13 +7,13 @@ export function render(post, postID, config) {
         const paddingClass = postID === 0 ? 'p-4 @xs:p-6 @sm:p-8' : 'p-2 @xs:p-4 @sm:p-6';
 
         if (parts.hasText) {
-            const ctaHTML = parts.ctaRowCode ? `<div class="mt-4 w-full">${parts.ctaRowCode}</div>` : '';
+            const ctaHTML = parts.ctaRowCode ? `<div class="mt-auto pt-4 w-full">${parts.ctaRowCode}</div>` : '';
 
             if (config.showImage) {
                 textContentHTML = `
                     <div class="absolute inset-0 flex flex-col p-0 pointer-events-none ${{ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign] || ''
                     }">
-                        <div class="pointer-events-auto flex flex-col min-w-0 w-full overflow-hidden ${(config.textVerticalAlign === 'overlay' || !({ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign])) ? 'h-full ' : ''}${parts.hasTextContent ? `${config.wrapperUI} backdrop-blur-xl ` : ''}rounded-none ${paddingClass} text-${config.textHAlign}">
+                        <div class="pointer-events-auto flex flex-col min-w-0 w-full overflow-hidden ${(config.textVerticalAlign === 'overlay' || !({ top: 'justify-start', middle: 'justify-center', bottom: 'justify-end', overlay: '' }[config.textVerticalAlign])) ? 'h-full ' : ''}${(parts.hasTextContent && (config.showHeader || config.showSnippet)) ? `${config.wrapperUI} backdrop-blur-xl ` : ''}rounded-none ${paddingClass} text-${config.textHAlign}">
                             ${parts.authorCode}
                             ${parts.labelsCode}
                             ${parts.titleCode}
@@ -47,4 +47,3 @@ export function render(post, postID, config) {
         return `<article class="${articleClasses}" role="article" itemscope itemtype="https://schema.org/Article"><div class="${blockClasses}">${parts.finalImageCode}${featuredBadgeHTML}${textContentHTML}</div></article>`;
     });
 }
-

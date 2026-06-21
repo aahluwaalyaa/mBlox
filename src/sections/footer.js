@@ -12,9 +12,9 @@ export function renderBlockFooter(config, response) {
             } else if (response.feedUrl) {
                 targetUrl = response.feedUrl;
             }
-            moreLinkHTML = `<a class="inline-block text-label-lg transition-opacity duration-300 opacity-50 hover:opacity-100 ${config.palette.text}" href="${targetUrl}" title="View all">
+            moreLinkHTML = `<a class="inline-block text-label-lg transition-opacity duration-300 opacity-50 hover:opacity-100" href="${targetUrl}" title="View all">
                             ${config.moreText} <svg class="inline-block align-text-bottom" fill="currentColor" height="1.2em" viewBox="0 0 16 16" width="1.2em" xmlns="http://www.w3.org/2000/svg"><use href="#icon-caret-right"></use></svg></a>`;
         }
     }
-    return `<div class="st${config.stageID} mblox-footer w-full py-8 text-right">${moreLinkHTML}</div>`;
+    return `<div class="st${config.stageID} mblox-footer w-full py-6 text-right">${moreLinkHTML}</div>`;
 }

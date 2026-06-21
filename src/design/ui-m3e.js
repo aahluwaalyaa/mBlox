@@ -57,28 +57,42 @@ export class M3ERenderer {
             }
 
             const renderedBlocks = [];
-            for (let postID = 0; postID < postsInFeed; postID++) {
+            const startPostID = config.firstInstance ? 1 : 0;
+            for (let postID = startPostID; postID < postsInFeed; postID++) {
                 let thumbHTML = renderers[BLOCK_SHOWCASE].renderThumbnail(response.posts[postID], config);
                 if (config.isCarousel) {
                     thumbHTML = thumbHTML.replace('<article class="', '<article class="snap-start ');
                 }
                 renderedBlocks.push(thumbHTML);
             }
-            return { renderedBlocks, carouselIndicators, showcaseHTML };
+            return { renderedBlocks, carouselIndicators, featureHTML: showcaseHTML };
+        }
+
+        if (config.blockType === BLOCK_LIST && postsInFeed > 0) {
+            if (config.firstInstance) {
+                showcaseHTML = renderers[BLOCK_LIST].render(response.posts[0], 0, config);
+            }
+
+            const renderedBlocks = [];
+            const startPostID = config.firstInstance ? 1 : 0;
+            for (let postID = startPostID; postID < postsInFeed; postID++) {
+                const post = response.posts[postID];
+                let finalType = config.showHeader ? BLOCK_STACK : BLOCK_CARD;
+                
+                let postHTML = renderers[finalType].render(post, postID, config);
+                if (config.isCarousel) {
+                    postHTML = postHTML.replace('<article class="', '<article class="snap-start ');
+                }
+                renderedBlocks.push(postHTML);
+            }
+            return { renderedBlocks, carouselIndicators, featureHTML: showcaseHTML };
         }
 
         const renderedBlocks = [];
         for (let postID = 0; postID < postsInFeed; postID++) {
             const post = response.posts[postID];
-            let currentColumnCount = config.columnCount;
 
-            let finalType = config.blockType;
-            if (config.blockType === BLOCK_LIST && postID > 0) {
-                finalType = config.showHeader ? BLOCK_STACK : BLOCK_CARD;
-                if (postID === 1 && config.showHeader) currentColumnCount--;
-            }
-
-            let postHTML = renderers[finalType].render(post, postID, config);
+            let postHTML = renderers[config.blockType].render(post, postID, config);
             if (config.isCarousel) {
                 postHTML = postHTML.replace('<article class="', '<article class="snap-start ');
             }
@@ -86,7 +100,7 @@ export class M3ERenderer {
             renderedBlocks.push(postHTML);
         }
 
-        return { renderedBlocks, carouselIndicators, showcaseHTML };
+        return { renderedBlocks, carouselIndicators, featureHTML: showcaseHTML };
     }
 
     createBlockHeader(config) {
@@ -151,7 +165,8 @@ export class M3ERenderer {
         const contentNode = featuredImageNode.querySelector('.sContent');
 
         if (figureNode) {
-            figureNode.addEventListener('click', function () {
+            figureNode.addEventListener('click', function (e) {
+                if (e.target.closest('button, a')) return;
                 const videoId = this.getAttribute('data-vidid');
                 if (videoId && videoId !== "noVideo") {
                     if (iFrameNode) {
@@ -191,6 +206,9 @@ export class M3ERenderer {
 
             // Only act if this post is part of a showcase grid (sFeature)
             if (!clickedPost.closest('.sFeature')) return;
+
+            // If the user clicked an interactive element (button/link), don't intercept
+            if (event.target.closest('button, a')) return;
 
             const data = {
                 vidid: clickedPost.getAttribute('data-vidid'),
@@ -297,7 +315,6 @@ export class M3ERenderer {
                 setTimeout(() => {
                     fadeIn(rawElement.querySelector(`div#m${config.mBlockID}-st${prevStage}`));
                     fadeIn(rawElement.querySelector(`div.mblox-footer.st${prevStage}`));
-                    rawElement.style.minHeight = '';
                 }, 160);
             });
         });
@@ -323,7 +340,6 @@ export class M3ERenderer {
                     setTimeout(() => {
                         fadeIn(nextStageEl);
                         fadeIn(rawElement.querySelector(`div.mblox-footer.st${nextStage}`));
-                        rawElement.style.minHeight = '';
                     }, 160);
                 } else {
                     const skeletonHtml = `

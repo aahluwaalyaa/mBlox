@@ -25,6 +25,7 @@ export function renderCTA(finalType, config, postTitle, postUrl) {
     else if (size === 'lg') paddingClasses = 'px-4 py-2';
     
     const baseClasses = `js-cta-link inline-block text-label-${size} ${paddingClasses} ${config.controlUI} ${isSharp ? 'rounded-none' : 'rounded-full'}`;
+    const stretchClass = (finalType === BLOCK_SHOWCASE || finalType === BLOCK_LIST) ? '' : 'after:absolute after:inset-0';
 
-    return `<a href="${postUrl}" class="${baseClasses} ${specificClasses} after:absolute after:inset-0 z-10" aria-label="View ${postTitle.replace(/"/g, '&quot;')}">${config.callToAction}</a>`;
+    return `<a href="${postUrl}" class="${baseClasses} ${specificClasses} ${stretchClass} z-10" aria-label="View ${postTitle.replace(/"/g, '&quot;')}">${config.callToAction}</a>`;
 }

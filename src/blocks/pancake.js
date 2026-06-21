@@ -5,11 +5,13 @@ export function render(post, postID, config) {
     return buildCard(BLOCK_PANCAKE, post, postID, config, (parts, config) => {
         const textContentHTML = parts.hasText ? `
             <div class="p-2 @xs:p-4 @sm:p-6 flex-grow flex flex-col text-${config.textHAlign}">
-                ${parts.authorCode}
-                ${parts.labelsCode}
-                ${parts.titleCode}
-                ${parts.snippetCode}
-                <div class="mt-auto pt-2">${parts.ctaRowCode}</div>
+                <div class="flex flex-col gap-3 w-full flex-grow">
+                    ${parts.authorCode}
+                    ${parts.labelsCode}
+                    ${parts.titleCode}
+                    ${parts.snippetCode}
+                    ${parts.ctaRowCode}
+                </div>
             </div>
         ` : '';
 

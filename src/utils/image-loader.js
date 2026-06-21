@@ -54,6 +54,7 @@ export function loadOptimalImages(rawElement) {
                 el.src = finalUrl;
             }
 
+            el.classList.remove('m-blox-image-to-load');
             observer.unobserve(el);
         });
     }, { rootMargin: "0px 0px 200px 0px" });

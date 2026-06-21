@@ -4,7 +4,7 @@ import { buildCard } from '../utils/card-builder.js';
 export function render(post, postID, config) {
     return buildCard(BLOCK_COMMENT, post, postID, config, (parts, config) => {
         const textContentHTML = `
-            <div class="w-full p-2 flex flex-col h-full text-${config.textHAlign}">
+            <div class="w-full p-2 flex flex-col flex-grow h-full text-${config.textHAlign}">
                 <div class="mb-1 opacity-50 flex flex-wrap items-center gap-x-1">${parts.authorCode}${parts.dateCode}</div>
                 ${parts.labelsCode}
                 ${parts.titleCode}

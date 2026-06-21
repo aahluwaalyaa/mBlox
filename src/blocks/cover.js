@@ -29,20 +29,30 @@ export function render(post, postID, config) {
 
     // Content container
     const hasText = Boolean(authorCode || dateCode || titleCode || snippetCode || ctaButtonCode || labelsCode);
+    const wrapperUIClasses = (hasText && config.textVerticalAlign !== 'overlay') ? `${config.wrapperUI} backdrop-blur-xl ` : '';
     const textContentHTML = hasText ? `
-        <div class="${config.wrapperUI} backdrop-blur-xl p-2 @xs:p-4 @sm:p-8 @md:p-12 absolute z-10 flex flex-col justify-center items-center ${{
-            top: `w-3/4 left-1/2 -translate-x-1/2 top-8 ${(config.cornerStyle === " rounded-none" || config.textVerticalAlign === "overlay") ? ' rounded-none' : ' rounded-3xl'}`,
-            middle: `w-3/4 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 ${(config.cornerStyle === " rounded-none" || config.textVerticalAlign === "overlay") ? ' rounded-none' : ' rounded-3xl'}`,
-            bottom: `w-3/4 left-1/2 -translate-x-1/2 bottom-8 ${(config.cornerStyle === " rounded-none" || config.textVerticalAlign === "overlay") ? ' rounded-none' : ' rounded-3xl'}`,
+        <div class="pointer-events-none flex flex-col items-center justify-center text-center w-full z-10 ${{
+            top: 'absolute top-0 left-0 right-0 p-4 @sm:p-8',
+            middle: 'absolute top-1/2 -translate-y-1/2 w-full p-4 @sm:p-8',
+            bottom: 'absolute bottom-0 left-0 right-0 p-4 @sm:p-8',
             overlay: `w-full h-full inset-0 rounded-none`
-        }[config.textVerticalAlign] || `w-3/4 left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 ${(config.cornerStyle === " rounded-none" || config.textVerticalAlign === "overlay") ? ' rounded-none' : ' rounded-3xl'}`
+        }[config.textVerticalAlign] || `w-full absolute top-1/2 -translate-y-1/2 p-4 @sm:p-8`
         }">
-            <div class="w-full flex flex-col items-center ${config.textVerticalAlign === 'overlay' ? 'max-w-[75%]' : ''}">
+            <div class="${wrapperUIClasses}w-full max-w-3xl flex flex-col items-center gap-3 pointer-events-auto p-6 @sm:p-8 @md:px-12 ${config.textVerticalAlign === 'overlay' ? 'rounded-none h-full justify-center' : config.cornerStyle}">
                 ${authorCode}
-                <div class="flex flex-wrap items-center justify-center gap-4">${dateCode ? `<div class="mb-3 shrink-0">${dateCode}</div>` : ''}${labelsCode ? `<div class="min-w-0 max-w-full">${labelsCode}</div>` : ''}</div>
+                ${(() => {
+            if (dateCode && labelsCode) {
+                return `<div class="flex flex-wrap items-center justify-center gap-4 w-full min-w-0"><div class="shrink-0 pointer-events-auto">${dateCode}</div><div class="min-w-0 max-w-full">${labelsCode}</div></div>`;
+            } else if (dateCode) {
+                return `<div class="flex justify-center w-full pointer-events-auto">${dateCode}</div>`;
+            } else if (labelsCode) {
+                return `<div class="flex justify-center w-full min-w-0">${labelsCode}</div>`;
+            }
+            return '';
+        })()}
                 ${titleCode}
                 ${snippetCode}
-                ${ctaButtonCode}
+                ${ctaButtonCode ? `<div class="mt-4">${ctaButtonCode}</div>` : ''}
             </div>
         </div>
     ` : '';

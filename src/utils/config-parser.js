@@ -1,13 +1,13 @@
 import {
     BLOCK_COVER, BLOCK_SHOWCASE, BLOCK_LIST, BLOCK_CARD, BLOCK_GALLERY,
     BLOCK_PANCAKE, BLOCK_STACK, BLOCK_QUOTE, BLOCK_COMMENT,
-    DEFAULT_COLUMN_COUNTS, M3E_PALETTES, LAYOUT_CLASSES, ASPECT_RATIO_CLASSES,
+    DEFAULT_COLUMN_COUNTS, M3E_PALETTES, LAYOUT_CLASSES, SECTION_LAYOUT_CLASS, ASPECT_RATIO_CLASSES,
     RESPONSIVE_COLUMN_MAP, getBreakpointIndex
 } from '../core/config.js';
 
 export function calculateLayout(config, postsInFeed) {
     let newConfig = { ...config };
-    if (newConfig.postsPerBlock <= 1 || newConfig.blockType === BLOCK_LIST) newConfig.isCarousel = false;
+    if (newConfig.postsPerBlock <= 1) newConfig.isCarousel = false;
     if (newConfig.isCarousel) {
         const baseCols = Math.max(1, Math.min(6, newConfig.columnCount)); // Clamp between 1 and 6
         const breakpointIndex = getBreakpointIndex(window.innerWidth);
@@ -211,5 +211,6 @@ export function parseBlockConfig(rawElement) {
         imageFilter: String(getVal("filter", "filter", "")).toLowerCase(),
     };
     config.layout = LAYOUT_CLASSES[config.spaceSize * 2] || LAYOUT_CLASSES[6];
+    config.sectionLayout = SECTION_LAYOUT_CLASS;
     return applyDefaultConfig(config);
 }

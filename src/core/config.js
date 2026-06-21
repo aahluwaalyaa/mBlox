@@ -97,6 +97,8 @@ export const LAYOUT_CLASSES = {
     12: 'gap-8 @3xl:gap-10 @5xl:gap-12'
 };
 
+export const SECTION_LAYOUT_CLASS = 'gap-4 md:gap-6 lg:gap-8';
+
 export const ASPECT_RATIO_CLASSES = {
     '1/1': 'aspect-square',
     '16/9': 'aspect-video',

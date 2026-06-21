@@ -1,7 +1,7 @@
 import { BLOCK_COVER, BLOCK_QUOTE, BLOCK_COMMENT } from '../core/config.js';
 
 export function renderTitle(finalType, config, postTitle, postUrl) {
-    if (!config.showHeader) return '';
+    if (!config.showHeader || !postTitle || postTitle.trim() === '') return '';
 
     const hasCta = Boolean(config.callToAction);
     const size = config.size || 'md';
@@ -11,6 +11,6 @@ export function renderTitle(finalType, config, postTitle, postUrl) {
         [BLOCK_COMMENT]: (title, url, hasCta) => `<span itemprop="headline" class="line-clamp-2 block my-2 text-title-${size}">"${hasCta ? title : `<a href="${url}" class="after:absolute after:inset-0 z-10" aria-label="Read more about ${title.replace(/"/g, '&quot;')}">${title}</a>`}"</span>`
     };
 
-    const render = TITLE_RENDERERS[finalType] || ((title, url, hasCta) => `<h5 itemprop="headline" class="line-clamp-2 text-title-${size} font-bold mb-2">${hasCta ? title : `<a href="${url}" class="after:absolute after:inset-0 z-10" aria-label="Read more about ${title.replace(/"/g, '&quot;')}">${title}</a>`}</h5>`);
+    const render = TITLE_RENDERERS[finalType] || ((title, url, hasCta) => `<h5 itemprop="headline" class="line-clamp-2 text-title-${size} font-bold">${hasCta ? title : `<a href="${url}" class="after:absolute after:inset-0 z-10" aria-label="Read more about ${title.replace(/"/g, '&quot;')}">${title}</a>`}</h5>`);
     return render(postTitle, postUrl, hasCta);
 }

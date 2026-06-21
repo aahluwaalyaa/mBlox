@@ -39,13 +39,13 @@ export function renderLabels(config, labels, siteUrl) {
     const heightClass = { sm: 'h-5', md: 'h-6', lg: 'h-8' }[chipSize] || 'h-6';
     const labelsHTML = displayLabels.map(label => {
         const encodedLabel = encodeURIComponent(label);
-        const displayString = label.startsWith('#') ? label.replace(/\s+/g, '') : `#${label.replace(/\s+/g, '')}`;
-        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="shrink-0 relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full cursor-pointer ${config.chipUI} ${heightClass} px-3 text-label-${chipSize}" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
+        const displayString = label.startsWith('_') ? label.substring(1) : label;
+        return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="shrink-0 relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full cursor-pointer ${config.chipUI} ${heightClass} px-3 text-label-${chipSize} mr-2 mb-2 align-top" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
     }).join('');
 
     return `
-    <div class="flex items-center gap-2 mb-3 relative z-50 pointer-events-auto max-w-full overflow-hidden">
-        <div class="flex flex-wrap items-center gap-2 overflow-hidden max-w-full ${heightClass}">
+    <div class="relative z-50 pointer-events-auto max-w-full overflow-hidden">
+        <div class="block max-w-full ${heightClass} overflow-hidden whitespace-normal">
             ${labelsHTML}
         </div>
     </div>`;

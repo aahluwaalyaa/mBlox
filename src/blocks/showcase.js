@@ -41,29 +41,37 @@ export function render(post, postID, config) {
 
     if (postID === 0 && config.firstInstance) {
         // Large feature block
-        const cornerClass = config.cornerStyle === " rounded-none" ? "rounded-none" : "rounded-t-3xl";
         const cta = (config.showImage || config.callToAction !== "") ? ctaButtonCode : "";
 
         let showcaseContent = '';
         if (config.showHeader || cta || config.showLabels) {
             const dateCode = renderDate(finalType, config, post.publishedDate, post.updatedDate);
             const labelsCode = renderLabels(config, post.labels, config.siteURL);
-            const dateAndLabels = (dateCode || labelsCode) ? `<div class="flex flex-wrap items-center gap-4">${dateCode ? `<div class="mb-3 shrink-0">${dateCode}</div>` : ''}${labelsCode ? `<div class="min-w-0">${labelsCode}</div>` : ''}</div>` : '';
-            const hsCode = config.showHeader || config.showLabels ? `<div class="flex-grow min-w-0 w-full @md:w-auto max-w-3xl text-${config.textHAlign}">${dateAndLabels}${titleCode} ${snippetCode}</div>` : '';
+            
+            let dateAndLabels = '';
+            if (dateCode && labelsCode) {
+                dateAndLabels = `<div class="flex items-center gap-4 w-full"><div class="shrink-0 pointer-events-auto">${dateCode}</div><div class="min-w-0 flex-1">${labelsCode}</div></div>`;
+            } else if (dateCode) {
+                dateAndLabels = `<div class="w-full pointer-events-auto">${dateCode}</div>`;
+            } else if (labelsCode) {
+                dateAndLabels = `<div class="w-full min-w-0">${labelsCode}</div>`;
+            }
+
+            const hasHSContent = Boolean(dateAndLabels || titleCode || snippetCode);
+            const hsCode = hasHSContent ? `<div class="flex-grow min-w-0 w-full max-w-3xl flex flex-col gap-3 text-${config.textHAlign}">${dateAndLabels}${titleCode} ${snippetCode}</div>` : '';
             const ctaAlignClass = config.ctaAlign === 'left' ? 'justify-start' : (config.ctaAlign === 'center' ? 'justify-center' : 'justify-end');
 
-            const ctaMargin = config.showHeader ? 'mt-4 @md:mt-0 @md:ml-6 ' : '';
-            const ctaWidth = config.showHeader ? 'w-full @md:w-auto' : 'w-full';
-            const ctaCode = cta ? `<div class="flex-shrink-0 ${ctaMargin}flex items-center ${ctaAlignClass} ${ctaWidth}">${cta}</div>` : '';
+            const ctaWidth = hasHSContent ? 'w-full @md:w-auto' : 'w-full';
+            const ctaCode = cta ? `<div class="flex-shrink-0 flex items-center ${ctaAlignClass} ${ctaWidth} pointer-events-none [&>a]:pointer-events-auto">${cta}</div>` : '';
 
-            const hasTextContent = Boolean(hsCode || ctaCode);
-            const wrapperClasses = hasTextContent ? `${config.wrapperUI} backdrop-blur-xl ` : '';
-            showcaseContent = `<div class="absolute inset-0 flex flex-col justify-end p-0 z-10 pointer-events-none w-full overflow-hidden"><div class="sContent w-full flex flex-col @md:flex-row items-start @md:items-center justify-between p-2 @xs:p-4 @sm:px-12 ${wrapperClasses}pointer-events-auto">${hsCode}${ctaCode}</div></div>`;
+            const hasTextContent = Boolean(titleCode || snippetCode || ctaCode);
+            const wrapperClasses = (hasTextContent && (config.showHeader || config.showSnippet)) ? `${config.wrapperUI} backdrop-blur-xl pointer-events-auto ` : '';
+            showcaseContent = `<div class="absolute inset-0 flex flex-col justify-end p-0 z-10 pointer-events-none w-full overflow-hidden"><div class="sContent w-full flex flex-col @md:flex-row items-start @md:items-center justify-between gap-4 @md:gap-6 p-2 @xs:p-4 @sm:px-12 ${wrapperClasses}pointer-events-none">${hsCode}${ctaCode}</div></div>`;
         }
 
-        const linkWrapper = `<a href="${post.url}" itemprop="url" class="absolute inset-0 z-30" title="${post.title.replace(/"/g, '&quot;')}" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>`;
+        const linkWrapper = `<a href="${post.url}" itemprop="url" class="absolute inset-0 z-10" title="${post.title.replace(/"/g, '&quot;')}" aria-label="View ${post.title.replace(/"/g, '&quot;')}"></a>`;
 
-        return `<div class="@container feature-image w-full ${config.aspectRatio.trim()} relative flex flex-col text-${config.textHAlign} overflow-hidden rounded-none" style="${config.articleHeight.replace(';', '')}" itemscope itemtype="https://schema.org/Article"><div class="sIframe hidden absolute inset-0 w-full h-full z-10"></div>${linkWrapper}${showcaseImageCode}<div class="${config.palette.text} block absolute inset-0 z-40 pointer-events-none">${showcaseContent}</div></div>`;
+        return `<div class="@container feature-image w-full ${config.aspectRatio.trim()} relative flex flex-col text-${config.textHAlign} overflow-hidden ${config.cornerStyle}" style="${config.articleHeight.replace(';', '')}" itemscope itemtype="https://schema.org/Article"><div class="sIframe hidden absolute inset-0 w-full h-full z-10"></div>${linkWrapper}${showcaseImageCode}<div class="${config.palette.text} block absolute inset-0 z-40 pointer-events-none">${showcaseContent}</div></div>`;
     }
 
     // Showcase grid post
