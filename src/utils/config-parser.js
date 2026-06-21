@@ -185,6 +185,7 @@ export function parseBlockConfig(rawElement) {
         blockRows: parseInt(blockRowsVal, 10),
         isCarousel: getBoolVal("isCarousel", "isCarousel", false),
         showNav: getBoolVal("showNav", "showNav", true),
+        navPosition: getVal("navPosition", "navPosition", "inside"),
         sectionHeight: getVal("iHeight", "iHeight", null),
         articleHeight: '',
         blurImage: imageBlur === "true" || jsonConfig.iBlur === true ? true : (imageBlur === "false" || jsonConfig.iBlur === false ? false : null),
