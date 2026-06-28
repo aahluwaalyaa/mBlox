@@ -36,7 +36,7 @@ export function renderLabels(config, labels, siteUrl) {
     }
 
     const chipSize = config.chipSize;
-    const paddingClass = { sm: 'px-1', md: 'px-2 py-1', lg: 'px-3 py-1' }[chipSize] || 'px-2 py-1';
+    const paddingClass = { sm: 'h-5', md: 'px-2 h-6', lg: 'px-3 h-8' }[chipSize] || 'px-2 h-6';
     const labelsHTML = displayLabels.map(label => {
         const encodedLabel = encodeURIComponent(label);
         let displayString = label.startsWith('_') ? label.substring(1) : label;
@@ -48,7 +48,7 @@ export function renderLabels(config, labels, siteUrl) {
 
     return `
     <div class="relative z-50 pointer-events-auto max-w-full overflow-hidden">
-        <div class="block max-w-full ${heightClass} overflow-hidden whitespace-normal">
+        <div class="block max-w-full ${paddingClass} overflow-hidden whitespace-normal">
             ${labelsHTML}
         </div>
     </div>`;
