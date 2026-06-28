@@ -71,6 +71,16 @@ If new Tailwind classes are used in the components, simply run the build script 
 npm run build
 ```
 
+### 4.2. Versioning and Publishing
+To release a new version of the package, simply run:
+```bash
+npm run deploy
+```
+This automated command will:
+1. **Build** the updated distribution assets.
+2. **Bump** the patch version (and automatically update `mBloxCall.js`).
+3. **Publish** to the npm registry (Note: requires OTP from your authenticator app).
+
 ---
 
 ## 5. Default Configuration

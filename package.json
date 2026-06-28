@@ -15,7 +15,9 @@
     "build:js": "node scripts/build-js.js",
     "postbuild": "node -e \"const fs=require('fs'); fs.cpSync('dist', 'M:/_workspace/dev/m/t/cdn.jsdelivr.net/npm/mblox/dist', {recursive: true, force: true}); console.log('✅ Deployed to local CDN testing folder');\"",
     "dev": "npx -y serve .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "version": "node -e \"const fs=require('fs'); let f=fs.readFileSync('mBloxCall.js','utf8'); f=f.replace(/@version\\\\s+\\\\d+\\\\.\\\\d+\\\\.\\\\d+/, '@version ' + process.env.npm_package_version); fs.writeFileSync('mBloxCall.js', f);\" && git add mBloxCall.js",
+    "deploy": "npm run build && npm version patch && npm publish"
   },
   "repository": {
     "type": "git",
