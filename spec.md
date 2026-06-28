@@ -50,8 +50,11 @@ The `data-type` attribute determines the rendering strategy:
 - `s` (Showcase): Featured item with interactive thumbnail grid.
 - `l` (List): Featured item followed by a list of smaller items.
 - `c` (Card): Standard M3E semantic cards.
+- `g` (Gallery): Image gallery layout.
 - `p` (Pancake): Vertically stacked image and content.
 - `t` (Stack): Horizontal image and content layout.
+- `q` (Quote): Blockquote styled content.
+- `m` (Comment): Comment display layout.
 
 ---
 
@@ -75,7 +78,7 @@ npm run build
 | Attribute | Default |
 |---|---|
 | `data-type` | `v-ih` |
-| `data-theme` | `light` |
+| `data-theme` | `auto` |
 | `data-posts` | `3` |
 | `data-cols` | Dynamic (based on type and viewport) |
 | `data-ar` | `1x1` |

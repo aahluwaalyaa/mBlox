@@ -209,7 +209,7 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | `data-iFix` | `iFix` | Fixed background image attachment (`true` or `false`). | Varies |
 | `data-cols` | `cols` | Number of columns in the grid layout. | Varies |
 | `data-rows` | `rows` | Number of rows (useful with `isCarousel`). | `1` |
-| `data-overlay-items`| `overlayItems`| Items to display in overlay (e.g., `vcasb`). | `vcasb` |
+| `data-overlay-items`| `overlayItems`| Items to display in overlay (e.g., `vcasb`). | Varies |
 | `data-isCarousel` | `isCarousel` | Enables carousel navigation (`true` or `false`). | `false` |
 | `data-iHeight` | `iHeight` | Height of the image or section (e.g., `100vh`, `70vh`, `m`). | Varies |
 | `data-space` | `space` | Gap between grid items. | Varies |
@@ -219,7 +219,7 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | `data-chipSize`| `chipSize`| Size scale for Date and Label chips (`sm`, `md`, `lg`). | `md` |
 | `data-filter` | `filter` | Tailwind CSS filter class applied to images (e.g. `grayscale`, `sepia`). | *(none)* |
 | `data-iBorder` | `iBorder` | Enables rounded borders on images (`true` or `false`). | `false` |
-| `data-snippetLines`| `snippetLines` | Maximum number of lines for post snippet. | `3` |
+| `data-snippetLines`| `snippetLines` | Maximum number of lines for post snippet. | `2` |
 | `data-CTAText` | `CTAText` | Custom call-to-action button text. | *(empty)* |
 | `data-ctaAlign` | `ctaAlign` | Alignment of the CTA button (`left`, `center`, `right`). | Varies |
 | `data-moreText` | `moreText` | Text for the "Read more" link. | *(empty)* |
