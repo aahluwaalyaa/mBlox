@@ -39,7 +39,10 @@ export function renderLabels(config, labels, siteUrl) {
     const heightClass = { sm: 'h-5', md: 'h-6', lg: 'h-8' }[chipSize] || 'h-6';
     const labelsHTML = displayLabels.map(label => {
         const encodedLabel = encodeURIComponent(label);
-        const displayString = label.startsWith('_') ? label.substring(1) : label;
+        let displayString = label.startsWith('_') ? label.substring(1) : label;
+        if (!displayString.startsWith('#')) {
+            displayString = '#' + displayString;
+        }
         return `<a aria-label="${label.replace(/"/g, '&quot;')}" class="shrink-0 relative z-50 pointer-events-auto inline-flex items-center justify-center rounded-full cursor-pointer ${config.chipUI} ${heightClass} px-3 text-label-${chipSize} mr-2 mb-2 align-top" href="${baseSearchUrl}${encodedLabel}"><span>${displayString}</span></a>`;
     }).join('');
 

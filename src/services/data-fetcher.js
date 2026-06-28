@@ -3,14 +3,7 @@
  * Handles JSONP requests and normalizing various feed structures.
  */
 
-export function extractHashtags(text) {
-    if (!text) return [];
-    // Matches # followed by alphanumeric characters or underscores
-    const hashtagRegex = /#([a-zA-Z0-9_]+)/g;
-    const matches = text.match(hashtagRegex);
-    // Returns the tags keeping the '#' symbol
-    return matches ? matches.map(tag => tag.toLowerCase()) : [];
-}
+
 
 export function fetchJSONP(url) {
     return new Promise((resolve, reject) => {
@@ -50,8 +43,7 @@ export function mapWordPressResponseToStandardFormat(wpResponse, headers) {
         thumbnailUrl: post._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.large?.source_url
             || post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '',
         labels: [...new Set([
-            ...(post._embedded?.['wp:term'] ? post._embedded?.['wp:term'].flat().map(t => t.name) : []),
-            ...extractHashtags(post.title.rendered + ' ' + post.content.rendered)
+            ...(post._embedded?.['wp:term'] ? post._embedded?.['wp:term'].flat().map(t => t.name) : [])
         ])],
         commentCount: post.comment_count ? parseInt(post.comment_count, 10) : (post._embedded?.replies?.[0]?.length || 0),
         commentsUrl: post.link ? `${post.link}#comments` : '',
@@ -87,8 +79,7 @@ export function mapRssResponseToStandardFormat(xmlDoc) {
                 authorUri: getTagContent('author > uri') || '',
                 authorImage: '',
                 labels: [...new Set([
-                    ...Array.from(item.querySelectorAll('category')).map(c => c.textContent),
-                    ...extractHashtags(getTagContent('title') + ' ' + (getTagContent('media\\:description') || ''))
+                    ...Array.from(item.querySelectorAll('category')).map(c => c.textContent)
                 ])],
                 commentCount: 0,
                 commentsUrl: '',
@@ -112,8 +103,7 @@ export function mapRssResponseToStandardFormat(xmlDoc) {
                 authorUri: getTagContent('author > uri') || '',
                 authorImage: '',
                 labels: [...new Set([
-                    ...Array.from(item.querySelectorAll('category')).map(c => c.textContent),
-                    ...extractHashtags(getTagContent('title') + ' ' + (getTagContent('description') || getTagContent('content')))
+                    ...Array.from(item.querySelectorAll('category')).map(c => c.textContent)
                 ])],
                 commentCount: getTagContent('slash\\:comments') ? parseInt(getTagContent('slash\\:comments'), 10) : 0,
                 commentsUrl: getTagContent('comments') || getTagContent('link') || item.querySelector('link[href]')?.getAttribute('href') || '',
@@ -160,8 +150,7 @@ export function mapRssJsonToStandardFormat(jsonDoc) {
             authorUri: '', 
             authorImage: '',
             labels: [...new Set([
-                ...(item.categories || []),
-                ...extractHashtags((item.title || '') + ' ' + (item.description || item.content || ''))
+                ...(item.categories || [])
             ])],
             commentCount: 0,
             commentsUrl: '',
@@ -219,8 +208,7 @@ export function mapRedditResponseToStandardFormat(redditJson) {
             authorUri: `https://www.reddit.com/user/${item.author}`,
             authorImage: '', // Reddit doesn't provide user avatars in the standard listing JSON
             labels: [...new Set([
-                ...(item.link_flair_text ? [item.link_flair_text] : []),
-                ...extractHashtags((item.title || '') + ' ' + content)
+                ...(item.link_flair_text ? [item.link_flair_text] : [])
             ])],
             commentCount: item.num_comments || 0,
             commentsUrl: `https://www.reddit.com${item.permalink}`,
@@ -254,8 +242,7 @@ export function mapBloggerResponseToStandardFormat(bloggerResponse) {
             url: (post.link.find(l => l.rel === 'alternate') || {}).href || '',
             thumbnailUrl: thumbnailUrl,
             labels: [...new Set([
-                ...(post.category ? post.category.map(c => c.term) : []),
-                ...extractHashtags((post.title.$t || '') + ' ' + content)
+                ...(post.category ? post.category.map(c => c.term) : [])
             ])],
             commentCount: post.thr$total ? parseInt(post.thr$total.$t, 10) : 0,
             commentsUrl: (post.link.find(l => l.rel === 'replies' && l.type === 'text/html') || {}).href || (post.link.find(l => l.rel === 'alternate') || {}).href || '',
