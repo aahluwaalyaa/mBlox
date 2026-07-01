@@ -194,7 +194,7 @@ Customize mBlox using `data-*` attributes or embedded JSON. The core attributes 
 | Attribute | JSON Key | Description | Default |
 |---|---|---|---|
 | `data-label` | `label` | Label name to fetch posts for (when `contentType` is `label`). | `"Label Name missing"` |
-| `data-contenttype` | `contentType` | Feed type to fetch: `recent`, `label`, or `comments`. | `recent` |
+| `data-contenttype` | `contentType` | Feed type to fetch: `recent`, `label`, `related`, or `comments`.<br>**Note:** `related` only works on Blogger and requires the theme to include:<br> `<script id='json:blogposts' type='application/json'><b:include data='posts' name='json.posts'/></script>` | `recent` |
 | `data-feed` | `feed` | Source URL of the blog or feed. | `/` |
 | `data-title` | `title` | Optional title for the block section. | *(empty)* |
 | `data-description`| `description` | Optional description for the block section. | *(empty)* |

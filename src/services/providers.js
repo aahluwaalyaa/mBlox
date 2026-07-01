@@ -141,19 +141,72 @@ export class BloggerProvider {
         return feedURL;
     }
     async _fetchCurrentPostLabels() {
-        // Try to get from window.config first
+        // 1. Try to get from <script id="json:blogposts"> (Primary Approach)
         try {
-            const currentPostId = window.config?.bg?.psId;
-            const currentPost = currentPostId && window.config?.ps?.[currentPostId];
-            if (currentPost && currentPost.lab && Array.isArray(currentPost.lab) && currentPost.lab.length > 0) {
-                return currentPost.lab;
+            const blogPostsScript = document.getElementById('json:blogposts');
+            if (blogPostsScript) {
+                let textContent = blogPostsScript.textContent || "";
+                // Strip CDATA tags if Blogger injects them
+                textContent = textContent.replace(/(?:\/\/\s*)?<!\[CDATA\[/g, '').replace(/(?:\/\/\s*)?\]\]>/g, '').trim();
+                const blogPostsData = JSON.parse(textContent);
+                for (const postId in blogPostsData) {
+                    const post = blogPostsData[postId];
+                    if (post && post.lab && Array.isArray(post.lab) && post.lab.length > 0) {
+                        return post.lab;
+                    }
+                }
             }
         } catch (e) {
-            // ignore
+            console.warn("mBlox: Failed to parse json:blogposts data.", e);
         }
-        
-        // Fallback to JSON feed via path
+
+        // 3. Try to get from standard Blogger _WidgetManager JSON data
         try {
+            if (typeof window !== 'undefined' && window._WidgetManager) {
+                const allData = window._WidgetManager._GetAllData();
+                // In Blogger v3 themes, post labels are often available here
+                const viewLabels = allData?.view?.labels || allData?.post?.labels;
+                if (viewLabels && Array.isArray(viewLabels) && viewLabels.length > 0) {
+                    return viewLabels;
+                }
+            }
+        } catch (e) {}
+
+        // 3. Try to get from standard Blogger JSON-LD schema
+        try {
+            const ldJsonScripts = document.querySelectorAll('script[type="application/ld+json"]');
+            for (const script of ldJsonScripts) {
+                const data = JSON.parse(script.textContent);
+                if (data['@type'] === 'BlogPosting') {
+                    if (data.articleSection) {
+                        return Array.isArray(data.articleSection) ? data.articleSection : [data.articleSection];
+                    }
+                    if (data.keywords) {
+                        return data.keywords.split(',').map(s => s.trim()).filter(Boolean);
+                    }
+                }
+            }
+        } catch (e) {}
+
+        // 4. Try to get from DOM tags (common fallback)
+        try {
+            const tagElements = document.querySelectorAll('a[rel="tag"]');
+            if (tagElements.length > 0) {
+                return Array.from(tagElements).map(el => el.textContent.trim()).filter(Boolean);
+            }
+            const metaKeywords = document.querySelector('meta[name="keywords"]');
+            if (metaKeywords && metaKeywords.content) {
+                const labels = metaKeywords.content.split(',').map(s => s.trim()).filter(Boolean);
+                if (labels.length > 0) return labels;
+            }
+        } catch (e) {}
+        
+        // 5. Fallback to JSON feed via path
+        try {
+            if (window.location.href.startsWith('about:') || window.location.pathname === '/' || !window.location.pathname.includes('.html')) {
+                return [];
+            }
+            
             const currentPath = window.location.pathname;
             const feedURL = this.config.siteURL + `feeds/posts/default?alt=json-in-script&path=${currentPath}`;
             const rawData = await fetchJSONP(feedURL);
