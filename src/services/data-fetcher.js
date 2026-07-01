@@ -32,24 +32,35 @@ export function fetchJSONP(url) {
 
 export function mapWordPressResponseToStandardFormat(wpResponse, headers) {
     if (!Array.isArray(wpResponse)) return { posts: [], totalResults: 0 };
-    const standardPosts = wpResponse.map(post => ({
-        title: post.title.rendered,
-        content: post.content.rendered,
-        authorName: post._embedded?.author[0]?.name || 'Unknown',
-        authorUri: post._embedded?.author[0]?.link || '',
-        authorImage: post._embedded?.author[0]?.avatar_urls?.['96'] || '',
-        publishedDate: post.date_gmt,
-        url: post.link,
-        thumbnailUrl: post._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.large?.source_url
-            || post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '',
-        labels: [...new Set([
-            ...(post._embedded?.['wp:term'] ? post._embedded?.['wp:term'].flat().map(t => t.name) : [])
-        ])],
-        commentCount: post.comment_count ? parseInt(post.comment_count, 10) : (post._embedded?.replies?.[0]?.length || 0),
-        commentsUrl: post.link ? `${post.link}#comments` : '',
-        viewCount: post.views || post.view_count || post.pageviews || 0,
-        updatedDate: post.modified_gmt || ''
-    }));
+    const standardPosts = wpResponse.map(post => {
+        let thumbnailUrl = post._embedded?.['wp:featuredmedia']?.[0]?.media_details?.sizes?.large?.source_url
+            || post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '';
+            
+        if (!thumbnailUrl && post.content?.rendered) {
+            const videoId = getYouTubeVideoId({ content: post.content.rendered });
+            if (videoId !== "noVideo") {
+                thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+            }
+        }
+        
+        return {
+            title: post.title.rendered,
+            content: post.content.rendered,
+            authorName: post._embedded?.author[0]?.name || 'Unknown',
+            authorUri: post._embedded?.author[0]?.link || '',
+            authorImage: post._embedded?.author[0]?.avatar_urls?.['96'] || '',
+            publishedDate: post.date_gmt,
+            url: post.link,
+            thumbnailUrl: thumbnailUrl,
+            labels: [...new Set([
+                ...(post._embedded?.['wp:term'] ? post._embedded?.['wp:term'].flat().map(t => t.name) : [])
+            ])],
+            commentCount: post.comment_count ? parseInt(post.comment_count, 10) : (post._embedded?.replies?.[0]?.length || 0),
+            commentsUrl: post.link ? `${post.link}#comments` : '',
+            viewCount: post.views || post.view_count || post.pageviews || 0,
+            updatedDate: post.modified_gmt || ''
+        };
+    });
     return { posts: standardPosts, totalResults: parseInt(headers.get('X-WP-Total') || '0', 10) };
 }
 
@@ -88,10 +99,18 @@ export function mapRssResponseToStandardFormat(xmlDoc) {
             };
         } else {
             let thumbnailUrl = item.querySelector('media\\:thumbnail[url], thumbnail[url]')?.getAttribute('url') || '';
+            const content = getTagContent('description') || getTagContent('content');
+            
             if (!thumbnailUrl) {
-                const content = getTagContent('description') || getTagContent('content');
                 const match = content.match(/<img[^>]+src="([^">]+)"/);
                 if (match) thumbnailUrl = match[1];
+            }
+            
+            if (!thumbnailUrl) {
+                const videoId = getYouTubeVideoId({ content });
+                if (videoId !== "noVideo") {
+                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                }
             }
             return {
                 title: getTagContent('title'),
@@ -134,9 +153,18 @@ export function mapRssJsonToStandardFormat(jsonDoc) {
         if (!thumbnailUrl && item.enclosure && item.enclosure.link && item.enclosure.type && item.enclosure.type.startsWith('image/')) {
             thumbnailUrl = item.enclosure.link;
         }
-        if (!thumbnailUrl && item.content) {
-            const match = item.content.match(/<img[^>]+src="([^">]+)"/);
+        
+        const content = item.description || item.content || '';
+        if (!thumbnailUrl && content) {
+            const match = content.match(/<img[^>]+src="([^">]+)"/);
             if (match) thumbnailUrl = match[1];
+        }
+        
+        if (!thumbnailUrl && content) {
+            const videoId = getYouTubeVideoId({ content });
+            if (videoId !== "noVideo") {
+                thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+            }
         }
 
         return {
@@ -232,6 +260,19 @@ export function mapBloggerResponseToStandardFormat(bloggerResponse) {
             const firstImage = contentParser.querySelector("img");
             if (firstImage) thumbnailUrl = firstImage.src;
         }
+        
+        // Fallback for YouTube videos in Blogger posts
+        if (!thumbnailUrl) {
+            if (post.media$thumbnail && post.media$thumbnail.url && post.media$thumbnail.url.includes('img.youtube.com')) {
+                thumbnailUrl = post.media$thumbnail.url.replace('default.jpg', 'mqdefault.jpg');
+            } else {
+                const videoId = getYouTubeVideoId({ content });
+                if (videoId !== "noVideo") {
+                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                }
+            }
+        }
+
         return {
             title: post.title.$t,
             content: content,
