@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const PROJECT_ROOT = process.cwd();
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PROJECT_ROOT = path.resolve(__dirname, '..');
 const ICONS_DIR = path.join(PROJECT_ROOT, 'src', 'assets', 'icons');
 const OUTPUT_FILE = path.join(PROJECT_ROOT, 'src', 'components', 'icons.js');
 
