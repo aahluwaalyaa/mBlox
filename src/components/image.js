@@ -20,7 +20,7 @@ export function renderImage(finalType, postID, config, data) {
     }
     if (!videoThumbnailURL) videoThumbnailURL = imageURL;
     let highResImageURL = imageURL;
-    if (videoID && videoID !== 'noVideo') highResImageURL = `https://i.ytimg.com/vi/${videoID}/maxresdefault.jpg`;
+    if (videoID && videoID !== 'noVideo') highResImageURL = `https://i.ytimg.com/vi_webp/${videoID}/maxresdefault.webp`;
     else if (config.isBloggerFeed) highResImageURL = highResImageURL.replace(/\/s\d+(-[a-z]\d+)*(-c)?/, '/s1600');
 
     const IMAGE_CONFIG_MAP = {

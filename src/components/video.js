@@ -1,8 +1,8 @@
 export function getYouTubeVideoId(post) {
     if (post.videoId) return post.videoId;
 
-    if (post.thumbnailUrl && (post.thumbnailUrl.includes("ytimg.com/vi/") || post.thumbnailUrl.includes("youtube.com/vi/"))) {
-        const match = post.thumbnailUrl.match(/\/vi\/([a-zA-Z0-9_-]{11})/);
+    if (post.thumbnailUrl && (post.thumbnailUrl.includes("ytimg.com/vi/") || post.thumbnailUrl.includes("ytimg.com/vi_webp/") || post.thumbnailUrl.includes("youtube.com/vi/"))) {
+        const match = post.thumbnailUrl.match(/\/vi(?:_webp)?\/([a-zA-Z0-9_-]{11})/);
         if (match && match[1]) return match[1];
     }
 

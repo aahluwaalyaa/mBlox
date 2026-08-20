@@ -39,7 +39,7 @@ export function mapWordPressResponseToStandardFormat(wpResponse, headers) {
         if (!thumbnailUrl && post.content?.rendered) {
             const videoId = getYouTubeVideoId({ content: post.content.rendered });
             if (videoId !== "noVideo") {
-                thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                thumbnailUrl = `https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`;
             }
         }
         
@@ -60,6 +60,11 @@ export function mapWordPressResponseToStandardFormat(wpResponse, headers) {
             viewCount: post.views || post.view_count || post.pageviews || 0,
             updatedDate: post.modified_gmt || ''
         };
+    });
+    standardPosts.forEach(post => {
+        if (post.thumbnailUrl && (post.thumbnailUrl.includes('ytimg.com') || post.thumbnailUrl.includes('youtube.com'))) {
+            post.thumbnailUrl = post.thumbnailUrl.replace(/\.jpg$/, '.webp').replace('/vi/', '/vi_webp/');
+        }
     });
     return { posts: standardPosts, totalResults: parseInt(headers.get('X-WP-Total') || '0', 10) };
 }
@@ -109,7 +114,7 @@ export function mapRssResponseToStandardFormat(xmlDoc) {
             if (!thumbnailUrl) {
                 const videoId = getYouTubeVideoId({ content });
                 if (videoId !== "noVideo") {
-                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                    thumbnailUrl = `https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`;
                 }
             }
             return {
@@ -134,6 +139,11 @@ export function mapRssResponseToStandardFormat(xmlDoc) {
 
     const feedUrl = xmlDoc.querySelector('channel > link, feed > link[rel="alternate"]')?.getAttribute('href')
         || xmlDoc.querySelector('channel > link, feed > link[rel="alternate"]')?.textContent || '';
+    standardPosts.forEach(post => {
+        if (post.thumbnailUrl && (post.thumbnailUrl.includes('ytimg.com') || post.thumbnailUrl.includes('youtube.com'))) {
+            post.thumbnailUrl = post.thumbnailUrl.replace(/\.jpg$/, '.webp').replace('/vi/', '/vi_webp/');
+        }
+    });
     return { posts: standardPosts, totalResults: items.length, feedUrl };
 }
 
@@ -163,7 +173,7 @@ export function mapRssJsonToStandardFormat(jsonDoc) {
         if (!thumbnailUrl && content) {
             const videoId = getYouTubeVideoId({ content });
             if (videoId !== "noVideo") {
-                thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                thumbnailUrl = `https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`;
             }
         }
 
@@ -187,6 +197,11 @@ export function mapRssJsonToStandardFormat(jsonDoc) {
         };
     });
 
+    standardPosts.forEach(post => {
+        if (post.thumbnailUrl && (post.thumbnailUrl.includes('ytimg.com') || post.thumbnailUrl.includes('youtube.com'))) {
+            post.thumbnailUrl = post.thumbnailUrl.replace(/\.jpg$/, '.webp').replace('/vi/', '/vi_webp/');
+        }
+    });
     return { posts: standardPosts, totalResults: jsonDoc.items.length, feedUrl: jsonDoc.feed.link };
 }
 
@@ -245,6 +260,11 @@ export function mapRedditResponseToStandardFormat(redditJson) {
         };
     });
 
+    standardPosts.forEach(post => {
+        if (post.thumbnailUrl && (post.thumbnailUrl.includes('ytimg.com') || post.thumbnailUrl.includes('youtube.com'))) {
+            post.thumbnailUrl = post.thumbnailUrl.replace(/\.jpg$/, '.webp').replace('/vi/', '/vi_webp/');
+        }
+    });
     return { posts: standardPosts, totalResults: standardPosts.length, feedUrl: '' };
 }
 
@@ -263,12 +283,12 @@ export function mapBloggerResponseToStandardFormat(bloggerResponse) {
         
         // Fallback for YouTube videos in Blogger posts
         if (!thumbnailUrl) {
-            if (post.media$thumbnail && post.media$thumbnail.url && post.media$thumbnail.url.includes('img.youtube.com')) {
-                thumbnailUrl = post.media$thumbnail.url.replace('default.jpg', 'mqdefault.jpg');
+            if (post.media$thumbnail && post.media$thumbnail.url && (post.media$thumbnail.url.includes('img.youtube.com') || post.media$thumbnail.url.includes('ytimg.com'))) {
+                thumbnailUrl = post.media$thumbnail.url.replace('default.jpg', 'mqdefault.webp').replace('/vi/', '/vi_webp/');
             } else {
                 const videoId = getYouTubeVideoId({ content });
                 if (videoId !== "noVideo") {
-                    thumbnailUrl = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                    thumbnailUrl = `https://i.ytimg.com/vi_webp/${videoId}/mqdefault.webp`;
                 }
             }
         }
@@ -292,15 +312,19 @@ export function mapBloggerResponseToStandardFormat(bloggerResponse) {
         };
     });
     const alternateLink = (bloggerResponse.feed.link.find(l => l.rel === 'alternate') || {}).href || '';
+    standardPosts.forEach(post => {
+        if (post.thumbnailUrl && (post.thumbnailUrl.includes('ytimg.com') || post.thumbnailUrl.includes('youtube.com'))) {
+            post.thumbnailUrl = post.thumbnailUrl.replace(/\.jpg$/, '.webp').replace('/vi/', '/vi_webp/');
+        }
+    });
     return { posts: standardPosts, totalResults: bloggerResponse.feed.openSearch$totalResults.$t, feedUrl: alternateLink };
 }
 
 export function getYouTubeVideoId(post) {
     if (post.videoId) return post.videoId;
-    if (post.thumbnailUrl && (post.thumbnailUrl.includes("ytimg.com/vi/") || post.thumbnailUrl.includes("youtube.com/vi/"))) {
-        const idStartIndex = post.thumbnailUrl.indexOf("/vi/") + 4;
-        const nextSlashIndex = post.thumbnailUrl.indexOf('/', idStartIndex);
-        if (nextSlashIndex !== -1) return post.thumbnailUrl.substring(idStartIndex, nextSlashIndex);
+    if (post.thumbnailUrl && (post.thumbnailUrl.includes("ytimg.com/vi/") || post.thumbnailUrl.includes("ytimg.com/vi_webp/") || post.thumbnailUrl.includes("youtube.com/vi/"))) {
+        const match = post.thumbnailUrl.match(/\/vi(?:_webp)?\/([a-zA-Z0-9_-]{11})/);
+        if (match && match[1]) return match[1];
     }
     if (post.content && post.content.includes('youtube.com/embed/')) {
         const match = post.content.match(/youtube\.com\/embed\/([^?"]+)/);

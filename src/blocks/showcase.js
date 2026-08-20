@@ -80,7 +80,7 @@ export function render(post, postID, config) {
     const overflowClass = config.cornerStyle.includes('rounded-none') ? '' : 'overflow-hidden';
     const articleClasses = `@container col-span-1 flex min-w-0 w-full h-full sPost cursor-pointer relative ${ringClasses} ${config.cornerStyle} ${overflowClass}`;
     let imageHigh = noImg;
-    if (videoID && videoID !== 'noVideo') imageHigh = `https://i.ytimg.com/vi/${videoID}/maxresdefault.jpg`;
+    if (videoID && videoID !== 'noVideo') imageHigh = `https://i.ytimg.com/vi_webp/${videoID}/maxresdefault.webp`;
     else if (post.thumbnailUrl) imageHigh = post.thumbnailUrl.replace(/\/s\d+(-[a-z]\d+)*(-c)?/, '/s1600');
 
     const escapedTitle = post.title.replace(/"/g, '&quot;');
@@ -95,7 +95,7 @@ export function renderThumbnail(post, config) {
     let highResUrl = thumbnailUrl;
 
     if (videoID && videoID !== 'noVideo' && highResUrl.includes('ytimg.com')) {
-        highResUrl = highResUrl.replace(/\/([^\/]+)$/, '/maxresdefault.jpg');
+        highResUrl = highResUrl.replace(/\/([^\/]+)$/, '/maxresdefault.webp').replace('/vi/', '/vi_webp/');
     } else {
         highResUrl = highResUrl.replace(/\/s\d+(-c)?/, '/s1600').replace(/\/w\d+-h\d+(-c)?/, '/s1600');
     }
